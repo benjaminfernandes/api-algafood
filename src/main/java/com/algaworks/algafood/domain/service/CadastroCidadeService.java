@@ -1,5 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,6 +23,7 @@ public class CadastroCidadeService implements CadastroService<Cidade> {
 	@Autowired
 	private CadastroService<Estado> cadastroEstado;
 
+	@Transactional
 	@Override
 	public Cidade salvar(Cidade cidade) {
 
@@ -31,6 +34,7 @@ public class CadastroCidadeService implements CadastroService<Cidade> {
 		return this.cidadeRepository.save(cidade);
 	}
 
+	@Transactional
 	@Override
 	public void excluir(Long cidadeId) {
 
