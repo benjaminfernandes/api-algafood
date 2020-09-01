@@ -29,6 +29,7 @@ import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.TaxaFrete;
 import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,7 +54,8 @@ public class Restaurante {
 	//@Multiplo(numero = 5)
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
-	//@JsonIgnore
+
+	@JsonIgnoreProperties(value = "nome", allowGetters = true)//ignora o nome da cozinha quando chamado pela classe Restaurante aula 11.2
 	@Valid //essa anotação habilita para que as propriedades da cozinha sejam validadas
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)//aula 9.8. ESR
 	@NotNull
