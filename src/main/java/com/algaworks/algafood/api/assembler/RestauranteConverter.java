@@ -3,9 +3,10 @@ package com.algaworks.algafood.api.assembler;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.domain.model.Cozinha;
@@ -18,38 +19,32 @@ import com.algaworks.algafood.domain.model.Restaurante;
 @Component
 public class RestauranteConverter implements Converter<Restaurante, RestauranteModel, RestauranteInput> {
 
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	//Converte o padrão DTO Input para um modelo a ser persistido no BD
 	@Override
 	public Restaurante toDomain(RestauranteInput inputModel) {
-		Restaurante restaurante = new Restaurante();
-		restaurante.setNome(inputModel.getNome());
-		restaurante.setTaxaFrete(inputModel.getTaxaFrete());
-		
-		Cozinha cozinha = new Cozinha();
-		cozinha.setId(inputModel.getCozinha().getId());
-		restaurante.setCozinha(cozinha);
-		
-		return restaurante;
+		return modelMapper.map(inputModel, Restaurante.class);
 	}
 
 	//Converte a entidade para o padrão DTO
 	@Override
 	public RestauranteModel toModel(Restaurante domain) {
-		CozinhaModel cozinhaModel = new CozinhaModel();
-		cozinhaModel.setId(domain.getCozinha().getId());
-		cozinhaModel.setNome(domain.getCozinha().getNome());
 		
-		RestauranteModel restauranteModel = new RestauranteModel();
-		restauranteModel.setId(domain.getId());
-		restauranteModel.setNome(domain.getNome());
-		restauranteModel.setTaxaFrete(domain.getTaxaFrete());
-		restauranteModel.setCozinha(cozinhaModel);
-		return restauranteModel;
+		return modelMapper.map(domain, RestauranteModel.class);//Biblioteca para conversão de entidades, Aula 11.14
 	}
 
 	//Gera lista para o padrão DTO
 	@Override
 	public List<RestauranteModel> toCollectionModel(List<Restaurante> list) {
 		return list.stream().map(restaurante -> toModel(restaurante)).collect(Collectors.toList());
+	}
+
+	@Override
+	public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) { // usado no método de atualização de objetos
+		//Para evitar identifier of an instance of com.algaworks.algafood.domain.model.Cozinha was altered from 1 to 2
+		restaurante.setCozinha(new Cozinha());
+		modelMapper.map(restauranteInput, restaurante);
 	}
 }

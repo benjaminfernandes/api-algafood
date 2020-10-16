@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +34,7 @@ public class RestauranteController {
 	@Autowired
 	private CadastroService<Restaurante> cadastroRestaurante;
 	@Autowired
-	private SmartValidator validator;
-	@Autowired
-	RestauranteConverter restauranteConverter;
+	private RestauranteConverter restauranteConverter;
 	
 	@GetMapping
 	public List<RestauranteModel> listar(){
@@ -56,11 +52,14 @@ public class RestauranteController {
 	public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput){
 
 		try {
-			Restaurante restaurante = this.restauranteConverter.toDomain(restauranteInput);
+			//Restaurante restaurante = this.restauranteConverter.toDomain(restauranteInput);
 			
 			Restaurante restauranteAtual = this.cadastroRestaurante.buscarOuFalhar(restauranteId);
-			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro", 
-					"produtos");
+			
+			restauranteConverter.copyToDomainObject(restauranteInput, restauranteAtual);
+			
+			//BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro", 
+				//	"produtos");
 			return restauranteConverter.toModel(cadastroRestaurante.salvar(restauranteAtual));
 		}catch (CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
