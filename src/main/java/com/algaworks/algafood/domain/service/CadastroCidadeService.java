@@ -40,6 +40,7 @@ public class CadastroCidadeService implements CadastroService<Cidade> {
 
 		try {
 			this.cidadeRepository.deleteById(cidadeId);
+			this.cidadeRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new CidadeNaoEncontradaException(
 					String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId));

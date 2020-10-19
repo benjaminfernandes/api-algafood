@@ -40,6 +40,7 @@ public class CadastroRestauranteService implements CadastroService<Restaurante> 
 		
 		try {
 			this.restauranteRepository.deleteById(id);
+			this.restauranteRepository.flush();
 		}catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.format(RESTAURANTE_EM_USO, id));
 		}catch (EmptyResultDataAccessException e) {
