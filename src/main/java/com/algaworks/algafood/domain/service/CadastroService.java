@@ -2,7 +2,7 @@ package com.algaworks.algafood.domain.service;
 
 public interface CadastroService<T> {
 
-	T  salvar(T entity);
-	void excluir(Long id);
-	T buscarOuFalhar(Long id);
+	public T  salvar(T entity);
+	public void excluir(Long id);
+	public T buscarOuFalhar(Long id);
 }

@@ -35,22 +35,16 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//@NotBlank(message = "Nome é obrigatório")
 	@Column(nullable = false)
 	private String nome;
-	//@NotNull
-	//@PositiveOrZero(message = "{TaxaFrete.invalida}")
 	@TaxaFrete //9.15 ESR
-	//@Multiplo(numero = 5)
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
-
-	//@Valid //essa anotação habilita para que as propriedades da cozinha sejam validadas
-	//@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)//aula 9.8. ESR
-	//@NotNull
 	@ManyToOne//(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
+	@Column(name="ativo")
+	private Boolean ativo = Boolean.TRUE;
 	@Embedded
 	private Endereco endereco;
 	@CreationTimestamp
@@ -63,7 +57,13 @@ public class Restaurante {
 	@JoinTable(name="restaurante_forma_pagamento", joinColumns = @JoinColumn(name="restaurante_id"), 
 				inverseJoinColumns = @JoinColumn(name="forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();
-	
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
+	
+	public void ativar() {
+		setAtivo(true);
+	}
+	public void inativar() {
+		setAtivo(false);
+	}
 }

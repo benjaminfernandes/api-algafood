@@ -46,7 +46,17 @@ public class CadastroRestauranteService implements CadastroService<Restaurante> 
 		}catch (EmptyResultDataAccessException e) {
 			throw new RestauranteNaoEncontradoException(String.format(RESTAURANTE_NAO_ENCONTRADO, id));
 		}
-		
+	}
+	
+	@Transactional
+	public void ativar(Long restauranteId) {
+		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+		restauranteAtual.ativar();
+	}
+	@Transactional
+	public void inativar(Long restauranteId) {
+		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+		restauranteAtual.inativar();
 	}
 
 	public Restaurante buscarOuFalhar(Long id) {

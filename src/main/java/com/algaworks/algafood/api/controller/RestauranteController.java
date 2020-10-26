@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
-import com.algaworks.algafood.domain.service.CadastroService;
+import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -32,7 +33,7 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteRepository restauranteRepository;
 	@Autowired
-	private CadastroService<Restaurante> cadastroRestaurante;
+	private CadastroRestauranteService cadastroRestaurante;
 	@Autowired
 	private RestauranteConverter restauranteConverter;
 	
@@ -79,6 +80,17 @@ public class RestauranteController {
 			throw new NegocioException(e.getMessage());
 		}
 	}
+	@PutMapping("/{restauranteId}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void ativar(@PathVariable Long restauranteId) {
+		cadastroRestaurante.ativar(restauranteId);
+	}
+	@DeleteMapping("/{restauranteId}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inativar(@PathVariable Long restauranteId) {
+		cadastroRestaurante.inativar(restauranteId);
+	}
+	
 	/*
 	@PatchMapping("/{restauranteId}")
 	public RestauranteModel atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos, HttpServletRequest request){
