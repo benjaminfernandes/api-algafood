@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class FormaPagamentoConverter implements Converter<FormaPagamento, FormaP
 	}
 
 	@Override
-	public List<FormaPagamentoModel> toCollectionModel(List<FormaPagamento> list) {
+	public List<FormaPagamentoModel> toCollectionModel(Collection<FormaPagamento> list) {
 		return list.stream().map(formaPagamento -> toModel(formaPagamento)).collect(Collectors.toList());
 	}
 

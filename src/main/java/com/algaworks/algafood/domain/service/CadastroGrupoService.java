@@ -1,5 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,11 +19,13 @@ public class CadastroGrupoService implements CadastroService<Grupo> {
 	private GrupoRepository grupoRepository;
 	
 	@Override
+	@Transactional
 	public Grupo salvar(Grupo entity) {
 		return this.grupoRepository.save(entity);
 	}
 
 	@Override
+	@Transactional
 	public void excluir(Long id) {
 		try {
 			this.grupoRepository.deleteById(id);
