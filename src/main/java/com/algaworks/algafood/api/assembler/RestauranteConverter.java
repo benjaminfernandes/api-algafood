@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class RestauranteConverter implements Converter<Restaurante, RestauranteM
 
 	//Gera lista para o padrão DTO
 	@Override
-	public List<RestauranteModel> toCollectionModel(List<Restaurante> list) {
+	public List<RestauranteModel> toCollectionModel(Collection<Restaurante> list) {
 		return list.stream().map(restaurante -> toModel(restaurante)).collect(Collectors.toList());
 	}
 

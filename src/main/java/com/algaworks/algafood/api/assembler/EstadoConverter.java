@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class EstadoConverter implements Converter<Estado, EstadoModel, EstadoInp
 	}
 
 	@Override
-	public List<EstadoModel> toCollectionModel(List<Estado> list) {
+	public List<EstadoModel> toCollectionModel(Collection<Estado> list) {
 		return list.stream().map(estado -> toModel(estado)).collect(Collectors.toList());
 	}
 

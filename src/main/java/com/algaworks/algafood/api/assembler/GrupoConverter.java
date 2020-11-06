@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class GrupoConverter implements Converter<Grupo, GrupoModel, GrupoInput> 
 	}
 
 	@Override
-	public List<GrupoModel> toCollectionModel(List<Grupo> list) {
+	public List<GrupoModel> toCollectionModel(Collection<Grupo> list) {
 		
 		return list.stream().map(grupo -> toModel(grupo)).collect(Collectors.toList());
 	}

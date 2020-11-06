@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class CidadeConverter implements Converter<Cidade, CidadeModel, CidadeInp
 	}
 
 	@Override
-	public List<CidadeModel> toCollectionModel(List<Cidade> list) {
+	public List<CidadeModel> toCollectionModel(Collection<Cidade> list) {
 		return list.stream().map(cidade -> toModel(cidade)).collect(Collectors.toList());
 	}
 

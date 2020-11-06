@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class UsuarioConverter implements Converter<Usuario, UsuarioModel, Usuari
 	}
 
 	@Override
-	public List<UsuarioModel> toCollectionModel(List<Usuario> list) {
+	public List<UsuarioModel> toCollectionModel(Collection<Usuario> list) {
 		return list.stream().map(usuario -> toModel(usuario)).collect(Collectors.toList());
 	}
 

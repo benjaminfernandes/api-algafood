@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class CozinhaConverter implements Converter<Cozinha, CozinhaModel, Cozinh
 	}
 
 	@Override
-	public List<CozinhaModel> toCollectionModel(List<Cozinha> list) {
+	public List<CozinhaModel> toCollectionModel(Collection<Cozinha> list) {
 		return list.stream().map(cozinha -> toModel(cozinha)).collect(Collectors.toList());
 	}
 
