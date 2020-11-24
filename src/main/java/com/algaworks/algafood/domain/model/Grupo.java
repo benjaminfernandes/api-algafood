@@ -29,4 +29,12 @@ public class Grupo {
 	@ManyToMany
 	@JoinTable(name="grupo_permissao", joinColumns = @JoinColumn(name="grupo_id"), inverseJoinColumns = @JoinColumn(name="permissao_id"))
 	private List<Permissao> permissoes = new ArrayList<Permissao>();
+	
+	public void adicionaPermissao(Permissao permissao) {
+		permissoes.add(permissao);
+	}
+	
+	public void retiraPermissao(Permissao permissao) {
+		permissoes.remove(permissao);
+	}
 }

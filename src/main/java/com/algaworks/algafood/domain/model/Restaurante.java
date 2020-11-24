@@ -47,6 +47,8 @@ public class Restaurante {
 	private Cozinha cozinha;
 	@Column(name="ativo")
 	private Boolean ativo = Boolean.TRUE;
+	@Column(name="aberto")
+	private Boolean aberto = Boolean.FALSE;
 	@Embedded
 	private Endereco endereco;
 	@CreationTimestamp
@@ -61,6 +63,14 @@ public class Restaurante {
 	private Set<FormaPagamento> formasPagamento = new HashSet<>();
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
+	
+	public void abrir() {
+		setAberto(Boolean.TRUE);
+	}
+	
+	public void fechar() {
+		setAberto(Boolean.FALSE);
+	}
 	
 	public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
 		return getFormasPagamento().remove(formaPagamento);

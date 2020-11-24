@@ -91,6 +91,18 @@ public class RestauranteController {
 		cadastroRestaurante.inativar(restauranteId);
 	}
 	
+	@PutMapping("/{restauranteId}/abertura")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void abertura(@PathVariable Long restauranteId) {
+		this.cadastroRestaurante.abrir(restauranteId);
+	}
+	
+	@PutMapping("/{restauranteId}/fechamento")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void fechamento(@PathVariable Long restauranteId) {
+		this.cadastroRestaurante.fechar(restauranteId);
+	}
+	
 	/*
 	@PatchMapping("/{restauranteId}")
 	public RestauranteModel atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos, HttpServletRequest request){
