@@ -13,6 +13,7 @@ truncate table restaurante;
 truncate table restaurante_forma_pagamento;
 truncate table usuario;
 truncate table usuario_grupo;
+delete from restaurante_usuario_responsavel;
 
 set foreign_key_checks = 1;
 
@@ -62,4 +63,9 @@ insert into grupo (id, nome) values (1, 'Gerente'), (2, 'Vendedor'), (3, 'Secret
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
 
 insert into usuario (id, nome, email, senha, data_cadastro) values (1, 'João da Silva', 'joao.ger@algafood.com', '123', utc_timestamp), (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
-(3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp), (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);  
+(3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp), (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);
+
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2);  
+
+insert into usuario (id, nome, email, senha, data_cadastro) values
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);
