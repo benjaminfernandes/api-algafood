@@ -20,7 +20,7 @@ public class PedidoConverter implements Converter<Pedido, PedidoModel, Pedidoinp
 	
 	@Override
 	public Pedido toDomain(Pedidoinput inputModel) {
-		return null;
+		return modelMapper.map(inputModel, Pedido.class);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class PedidoConverter implements Converter<Pedido, PedidoModel, Pedidoinp
 
 	@Override
 	public void copyToDomainObject(Pedidoinput inputModel, Pedido model) {
-		
+		this.modelMapper.map(inputModel, model);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ public class FormaPagamentoNaoEncontradaException extends EntidadeNaoEncontradaE
 	}
 	
 	public FormaPagamentoNaoEncontradaException(Long formaPagamentoId) {
-		super(String.format("Não foi possível excluir a forma de pagamento com código %d", formaPagamentoId));
+		super(String.format("Não foi possível encontrar a forma de pagamento com código %d", formaPagamentoId));
 	}
 
 	private static final long serialVersionUID = 1L;
