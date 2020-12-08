@@ -19,8 +19,6 @@ import com.algaworks.algafood.api.assembler.PedidoResumoConverter;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.Pedidoinput;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
@@ -45,9 +43,9 @@ public class PedidoController {
 		return this.pedidoResumoConverter.toCollectionModel(this.pedidoRepository.findAll());
 	}
 	
-	@GetMapping("/{codigo}")
-	public PedidoModel buscar(@PathVariable Long codigo) {
-		Pedido pedido = this.pedidoService.buscarOuFalhar(codigo);
+	@GetMapping("/{codigoPedido}")
+	public PedidoModel buscar(@PathVariable String codigoPedido) {
+		Pedido pedido = this.pedidoService.buscarOuFalhar(codigoPedido);
 		return this.pedidoConverter.toModel(pedido);
 	}
 	
@@ -59,11 +57,7 @@ public class PedidoController {
         pedido.setCliente(new Usuario());
         pedido.getCliente().setId(1L);
 	
-        try {
-        	pedido = this.pedidoService.salvar(pedido);
-        }catch (EntidadeNaoEncontradaException e) {
-			throw new NegocioException(e.getMessage(), e);
-		}
+        pedido = this.pedidoService.salvar(pedido);
         
         return this.pedidoConverter.toModel(pedido);
 	}

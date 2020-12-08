@@ -50,6 +50,11 @@ public class CadastroPedidoService implements CadastroService<Pedido> {
 		return this.pedidoRepository.findById(id).orElseThrow(() -> new PedidoNaoEncontradoException(id));
 	}
 	
+	public Pedido buscarOuFalhar(String codigo) {
+		
+		return this.pedidoRepository.findByCodigo(codigo).orElseThrow(() -> new PedidoNaoEncontradoException(codigo));
+	}
+	
 	private void validarPedido(Pedido pedido) {
 		Restaurante restaurante = this.restauranteService.buscarOuFalhar(pedido.getRestaurante().getId());
 		FormaPagamento formaPagamento = this.formaPagamentoService.buscarOuFalhar(pedido.getFormaPagamento().getId());
