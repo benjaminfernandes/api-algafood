@@ -5,6 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,13 +43,21 @@ public class PedidoController {
 	@Autowired
 	private PedidoResumoConverter pedidoResumoConverter;
 	
-
-	
 	@GetMapping
-	public List<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter){
+	public Page<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
+			@PageableDefault(size=10) Pageable pageable){
 		
-		return this.pedidoResumoConverter
-				.toCollectionModel(this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter)));
+		Page<Pedido> pedidosPage = this.pedidoRepository
+				.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
+		
+		List<PedidoResumoModel> pedidosModel = this.pedidoResumoConverter
+				.toCollectionModel(pedidosPage.getContent());
+		
+		Page<PedidoResumoModel> pedidoResumoModelPage = new 
+				PageImpl<PedidoResumoModel>(pedidosModel, pageable, 
+						pedidosPage.getTotalElements());
+		
+		return pedidoResumoModelPage;
 	}
 	
 	@GetMapping("/{codigoPedido}")
