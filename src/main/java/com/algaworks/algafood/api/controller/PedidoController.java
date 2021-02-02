@@ -22,6 +22,8 @@ import com.algaworks.algafood.api.model.input.Pedidoinput;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
+import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
+import com.algaworks.algafood.domain.repository.infraestructure.spec.PedidoSpecs;
 import com.algaworks.algafood.domain.service.CadastroPedidoService;
 
 @RestController
@@ -40,9 +42,10 @@ public class PedidoController {
 
 	
 	@GetMapping
-	public List<PedidoResumoModel> listar(){
+	public List<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter){
 		
-		return this.pedidoResumoConverter.toCollectionModel(this.pedidoRepository.findAll());
+		return this.pedidoResumoConverter
+				.toCollectionModel(this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter)));
 	}
 	
 	@GetMapping("/{codigoPedido}")
