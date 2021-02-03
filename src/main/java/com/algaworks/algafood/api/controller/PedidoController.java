@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -23,10 +24,11 @@ import com.algaworks.algafood.api.assembler.PedidoResumoConverter;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.Pedidoinput;
+import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
-import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
 import com.algaworks.algafood.domain.repository.infraestructure.spec.PedidoSpecs;
 import com.algaworks.algafood.domain.service.CadastroPedidoService;
 
@@ -46,6 +48,8 @@ public class PedidoController {
 	@GetMapping
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
 			@PageableDefault(size=10) Pageable pageable){
+		
+		traduzirPageable(pageable);
 		
 		Page<Pedido> pedidosPage = this.pedidoRepository
 				.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
@@ -77,5 +81,17 @@ public class PedidoController {
         pedido = this.pedidoService.salvar(pedido);
         
         return this.pedidoConverter.toModel(pedido);
+	}
+	//Aula 13.11
+	private Pageable traduzirPageable(Pageable apiPageable) {
+		var mapeamento = Map.of(
+				"codigo", "codigo",
+				"subTotal", "subTotal",
+				"restaurante.nome", "restaurante.nome",
+				"nomeCliente", "cliente.nome",
+				"valorTotal", "valorTotal"
+			);
+		
+		return PageableTranslator.translate(apiPageable, mapeamento);
 	}
 }
