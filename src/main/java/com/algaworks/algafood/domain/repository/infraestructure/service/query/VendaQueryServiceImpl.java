@@ -1,4 +1,4 @@
-package com.algaworks.algafood.domain.repository.infraestructure;
+package com.algaworks.algafood.domain.repository.infraestructure.service.query;
 
 import java.util.ArrayList;
 import java.util.Date;
