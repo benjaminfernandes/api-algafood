@@ -48,6 +48,13 @@ public class CatalogoFotoProdutoService {
 		return foto;
 	}
 	
+	@Transactional
+	public void excluir(FotoProduto fotoProduto) {
+		this.fotoStorageService.remover(fotoProduto.getNomeArquivo());
+		this.produtoRepository.delete(fotoProduto);
+		this.produtoRepository.flush();
+	}
+	
 	public FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
 		return this.produtoRepository.findFotoById(restauranteId, produtoId)
 				.orElseThrow(() -> new FotoNaoEncontradoException(restauranteId, produtoId));
