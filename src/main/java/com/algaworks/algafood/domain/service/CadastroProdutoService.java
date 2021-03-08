@@ -27,11 +27,13 @@ public class CadastroProdutoService implements CadastroService<Produto> {
 
 	@Override
 	public Produto buscarOuFalhar(Long id) {
-		return this.produtoRepository.findById(id).orElseThrow(() -> new ProdutoNaoEncontradoException(id));
+		return this.produtoRepository.findById(id).orElseThrow(() -> 
+		new ProdutoNaoEncontradoException(id));
 	}
 
 	public Produto buscarOuFalhar(Long restauranteId, Long produtoId) {
-		return this.produtoRepository.findById(restauranteId, produtoId).orElseThrow(() -> new ProdutoNaoEncontradoException(restauranteId, produtoId));
+		return this.produtoRepository.findById(restauranteId, produtoId).orElseThrow(() -> 
+		new ProdutoNaoEncontradoException(restauranteId, produtoId));
 	}
 	
 }
