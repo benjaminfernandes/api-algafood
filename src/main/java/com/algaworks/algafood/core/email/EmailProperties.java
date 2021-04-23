@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Validated //anotação necessário para validar o @NotNull ao iniciar a aplicação
@@ -18,4 +19,11 @@ public class EmailProperties {
 
 	@NotNull
 	private String remetente;
+	@NonNull
+	private Impl impl;
+	
+	enum Impl {
+		FAKE, SMTP
+	}
+	
 }
