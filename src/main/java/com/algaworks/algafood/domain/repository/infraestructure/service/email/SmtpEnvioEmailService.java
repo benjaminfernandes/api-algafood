@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.repository.infraestructure.service.email;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,16 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
 	public void enviar(Mensagem mensagem) {
 		
 		try {
-		
+			MimeMessage mimeMessage = criarMimeMessage(mensagem);
+			mailSender.send(mimeMessage);
+		}catch (Exception e) {
+			throw new EmailException("Não foi possível enviar o e-mail", e);
+		}
+	}
+	
+	protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
 		String corpo = processarTemplate(mensagem);
-			
+		
 		MimeMessage mimeMessage = mailSender.createMimeMessage();	
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 		
@@ -37,10 +45,7 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
 		helper.setSubject(mensagem.getAssunto());
 		helper.setText(corpo, true);
 		
-		mailSender.send(mimeMessage);
-		}catch (Exception e) {
-			throw new EmailException("Não foi possível enviar o e-mail", e);
-		}
+		return mimeMessage;
 	}
 
 	protected String processarTemplate(Mensagem mensagem) {
