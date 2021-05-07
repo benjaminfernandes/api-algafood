@@ -4,26 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import com.algaworks.algafood.domain.event.PedidoConfirmadoEvent;
+import com.algaworks.algafood.domain.event.PedidoSaiuEntregaEvent;
 import com.algaworks.algafood.domain.listener.mensagem.MontaMensagemPadrao;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.service.EnvioEmailService;
 
 @Component
-public class NotificacaoClientePedidoConfirmadoListener {
+public class NotificacaoClienteSaiuEntregaListener {
 
 	@Autowired
 	private EnvioEmailService envioEmail;
 	@Autowired
-	private MontaMensagemPadrao montaMensagemPadrao;
+	private MontaMensagemPadrao montaMensagem;
 	
-	//aula 15.13
-	@TransactionalEventListener //Usado para enviar o e-mail antes de fazer o commit na transação
-	public void aoConfirmarPedido(PedidoConfirmadoEvent event) {
+	@TransactionalEventListener
+	private void aoConfirmarEntrega(PedidoSaiuEntregaEvent event) {
 		Pedido pedido = event.getPedido();
 		
-		var mensagem = this.montaMensagemPadrao.getMensagemPadrao(pedido, 
-				"pedido-confirmado.html");
+		var mensagem = this.montaMensagem.getMensagemPadrao(pedido, 
+				"pedido-saiu-entrega.html");
 		
 		envioEmail.enviar(mensagem);
 	}

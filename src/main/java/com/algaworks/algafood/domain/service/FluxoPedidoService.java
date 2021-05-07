@@ -30,11 +30,15 @@ public class FluxoPedidoService {
 	public void entregar(String codigoPedido) {
 		Pedido pedido = this.pedidoService.buscarOuFalhar(codigoPedido);
 		pedido.entregar();
+		
+		this.pedidoRepository.save(pedido);
 	}
 
 	@Transactional
 	public void cancelar(String codigoPedido) {
 		Pedido pedido = this.pedidoService.buscarOuFalhar(codigoPedido);
 		pedido.cancelar();
+		
+		this.pedidoRepository.save(pedido);
 	}
 }

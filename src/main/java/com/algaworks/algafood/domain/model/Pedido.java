@@ -24,7 +24,9 @@ import javax.persistence.PrePersist;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.algaworks.algafood.domain.event.PedidoCanceladoEvent;
 import com.algaworks.algafood.domain.event.PedidoConfirmadoEvent;
+import com.algaworks.algafood.domain.event.PedidoSaiuEntregaEvent;
 import com.algaworks.algafood.domain.exception.NegocioException;
 
 import lombok.Data;
@@ -90,11 +92,15 @@ public class Pedido extends AbstractAggregateRoot<Pedido> implements Serializabl
     public void entregar() {
     	setStatus(StatusPedido.ENTREGUE);
     	setDataEntrega(OffsetDateTime.now());
+    	
+    	registerEvent(new PedidoSaiuEntregaEvent(this));
     }
     
     public void cancelar() {
     	setStatus(StatusPedido.CANCELADO);
     	setDataCancelamento(OffsetDateTime.now());
+    	
+    	registerEvent(new PedidoCanceladoEvent(this));
     }
     
     private void setStatus(StatusPedido novoStatus) {
