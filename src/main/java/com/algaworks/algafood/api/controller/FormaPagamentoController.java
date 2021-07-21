@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.algaworks.algafood.api.assembler.FormaPagamentoConverter;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
@@ -47,7 +50,20 @@ public class FormaPagamentoController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<FormaPagamentoModel>> listar(){
+	public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request){
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		
+		String eTag = "0";
+		
+		OffsetDateTime dataUltimaAtualizacao = formaPagamentoRepository.getDataUltimaAtualizacao();
+		
+		if(dataUltimaAtualizacao != null) {
+			eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+		}
+		
+		if(request.checkNotModified(eTag)) {
+			return null;
+		}
 		
 		List<FormaPagamentoModel> formasPagamentoModel = this.formaPagamentoConverter
 				.toCollectionModel(this.formaPagamentoRepository.findAll());
@@ -58,6 +74,7 @@ public class FormaPagamentoController {
 				//.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
 				//.cacheControl(CacheControl.noCache())//toda requisição faz a checagem do hasg etag
 				//.cacheControl(CacheControl.noStore()) //desativa o cache
+				.eTag(eTag)
 				.body(formasPagamentoModel);
 	}
 	
