@@ -53,7 +53,11 @@ public class FormaPagamentoController {
 				.toCollectionModel(this.formaPagamentoRepository.findAll());
 		
 		return ResponseEntity.ok()
-				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)) //adiciona chace de 10 seg.
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) //adiciona cache de 10 seg.
+				//.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
+				//.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				//.cacheControl(CacheControl.noCache())//toda requisição faz a checagem do hasg etag
+				//.cacheControl(CacheControl.noStore()) //desativa o cache
 				.body(formasPagamentoModel);
 	}
 	
