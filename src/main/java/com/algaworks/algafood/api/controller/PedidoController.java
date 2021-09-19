@@ -24,6 +24,7 @@ import com.algaworks.algafood.api.assembler.PedidoResumoConverter;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.Pedidoinput;
+import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
@@ -34,7 +35,7 @@ import com.algaworks.algafood.domain.service.CadastroPedidoService;
 
 @RestController
 @RequestMapping("/pedidos")
-public class PedidoController {
+public class PedidoController implements PedidoControllerOpenApi{
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -94,4 +95,5 @@ public class PedidoController {
 		
 		return PageableTranslator.translate(apiPageable, mapeamento);
 	}
+
 }
