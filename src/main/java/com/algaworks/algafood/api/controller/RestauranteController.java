@@ -20,6 +20,7 @@ import com.algaworks.algafood.api.assembler.RestauranteConverter;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.model.view.RestauranteView;
+import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -31,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping("/restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -51,7 +52,6 @@ public class RestauranteController {
 	  public List<RestauranteModel> listarApenasNomes(){ 
 		  return listar(); 
 	  }
-	 
 	
 	/*
 	 * @GetMapping public MappingJacksonValue listar(@RequestParam(required = false)
@@ -141,16 +141,16 @@ public class RestauranteController {
 	
 	@PutMapping("/{restauranteId}/abertura")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void abertura(@PathVariable Long restauranteId) {
+	public void fechar(@PathVariable Long restauranteId) {
 		this.cadastroRestaurante.abrir(restauranteId);
 	}
 	
 	@PutMapping("/{restauranteId}/fechamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void fechamento(@PathVariable Long restauranteId) {
+	public void abrir(@PathVariable Long restauranteId) {
 		this.cadastroRestaurante.fechar(restauranteId);
 	}
-	
+
 	/*
 	@PatchMapping("/{restauranteId}")
 	public RestauranteModel atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos, HttpServletRequest request){

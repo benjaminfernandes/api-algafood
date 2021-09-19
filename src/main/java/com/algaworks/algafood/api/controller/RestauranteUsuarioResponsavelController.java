@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.UsuarioConverter;
 import com.algaworks.algafood.api.model.UsuarioModel;
+import com.algaworks.algafood.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 
 @RestController
 @RequestMapping(value = "/restaurantes/{restauranteId}/responsaveis") 
-public class RestauranteUsuarioResponsavelController {
+public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 
 	@Autowired
 	private CadastroRestauranteService restauranteService;
@@ -46,4 +47,5 @@ public class RestauranteUsuarioResponsavelController {
 		
 		this.restauranteService.desassociarResponsavel(restauranteId, usuarioId);
 	}
+
 }

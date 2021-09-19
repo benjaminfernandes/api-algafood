@@ -24,7 +24,6 @@ import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -74,7 +73,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 						new Tag("Grupos", "Gerencia os grupos"),
 						new Tag("Cozinhas", "Gerencia as cozinhas"),
 						new Tag("Formas de pagamento", "Gerencia as formas de pagamento"),
-						new Tag("Pedidos", "Gerencia os pedidos"));
+						new Tag("Pedidos", "Gerencia os pedidos"), 
+						new Tag("Restaurantes", "Gerencia os restaurantes"), 
+						new Tag("Estados", "Gerencia os estados"), 
+						new Tag("Produtos", "Gerencia os produtos de restaurantes"));
 	}
 
 	private List<ResponseMessage> globalGetResponseMessages() {

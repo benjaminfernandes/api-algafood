@@ -16,13 +16,13 @@ import io.swagger.annotations.ApiResponses;
 public interface CidadeControllerOpenApi {
 
 	@ApiOperation("Lista as cidades")
-	public List<CidadeModel> listar();
+	List<CidadeModel> listar();
 
 	@ApiOperation("Salvar cidade")
 	@ApiResponses({		
 		@ApiResponse(code = 201, message = "Cidade cadastrada")
 	})
-	public CidadeModel salvar(@ApiParam(name = "corpo", value = "Representação de uma nova cidade") 
+	CidadeModel salvar(@ApiParam(name = "corpo", value = "Representação de uma nova cidade") 
 		CidadeInput cidadeInput);
 
 	@ApiOperation("Busca uma cidade por id")
@@ -30,11 +30,11 @@ public interface CidadeControllerOpenApi {
 		@ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class),
 		@ApiResponse(code = 404, message = "Cidade não encontrada!", response = Problem.class)
 	})
-	public CidadeModel buscar(@ApiParam(value = "ID de uma cidade", example = "1") Long cidadeId);
+	CidadeModel buscar(@ApiParam(value = "ID de uma cidade", example = "1", required = true) Long cidadeId);
 
 	
 	@ApiOperation("Atualiza a cidade")
-	public CidadeModel atualizar(@ApiParam(value = "ID de uma cidade", example = "1") Long cidadeId, 
+	CidadeModel atualizar(@ApiParam(value = "ID de uma cidade", example = "1") Long cidadeId, 
 			@ApiParam(name = "corpo", value = "Representação de uma cidade com os novos dados")
 			CidadeInput cidadeInput);
 
@@ -44,6 +44,6 @@ public interface CidadeControllerOpenApi {
 		@ApiResponse(code = 204, message = "Cidade excluída"),
 		@ApiResponse(code = 404, message = "Cidade não encontrada!", response = Problem.class)
 	})
-	public void excluir(@ApiParam(value = "ID de uma cidade", example = "1") Long cidadeId);
+	void excluir(@ApiParam(value = "ID de uma cidade", example = "1") Long cidadeId);
 	
 }

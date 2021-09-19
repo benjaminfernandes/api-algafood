@@ -17,33 +17,34 @@ import io.swagger.annotations.ApiResponses;
 public interface CozinhaControllerOpenApi {
 
 	@ApiOperation("Lista as cozinhas")
-	public Page<CozinhaModel> listar(Pageable pageable);
+	Page<CozinhaModel> listar(Pageable pageable);
 
 	@ApiOperation("Busca uma cozinha por id")
 	@ApiResponses({
 		@ApiResponse(code = 400, message = "ID da cozinha inválido", response = Problem.class),
 		@ApiResponse(code = 404, message = "Cozinha não encontrada!", response = Problem.class)
 	})
-	public CozinhaModel buscar(Long cozinhaId);
+	CozinhaModel buscar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true)
+	Long cozinhaId);
 
 	@ApiOperation("Adicionar cozinha")
 	@ApiResponses({		
 		@ApiResponse(code = 201, message = "Cozinha cadastrada")
 	})
-	public CozinhaModel adicionar(
+	CozinhaModel adicionar(
 			@ApiParam(name = "corpo", value = "Representação de uma nova cozinha")
 			CozinhaInput cozinhaInput);
 
 	@ApiOperation("Atualiza a cozinha")
-	public CozinhaModel atualizar(@ApiParam(value = "ID de uma cozinha", example = "1")
+	CozinhaModel atualizar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true)
 	Long cozinhaId, 
-	@ApiParam(name = "corpo", value = "Representação de uma cozinha com os novos dados")
-	CozinhaInput cozinhaInput);
+		@ApiParam(name = "corpo", value = "Representação de uma cozinha com os novos dados")
+		CozinhaInput cozinhaInput);
 
 	@ApiOperation("Exclui uma cozinha por id")
 	@ApiResponses({
 		@ApiResponse(code = 204, message = "Cozinha excluída"),
 		@ApiResponse(code = 404, message = "Cozinha não encontrada!", response = Problem.class)
 	})
-	public void remover(@ApiParam(value = "ID de uma cozinha", example = "1") Long cozinhaId);
+	void remover(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
 }

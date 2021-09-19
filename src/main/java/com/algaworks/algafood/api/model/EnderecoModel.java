@@ -12,7 +12,7 @@ public class EnderecoModel {
 	private String cep;
 	@ApiModelProperty(example = "Rua Francisco Murtinho")
 	private String logradouro;
-	@ApiModelProperty(example = "123")
+	@ApiModelProperty(example = "\"1500\"")
 	private String numero;
 	@ApiModelProperty(example = "casa")
 	private String complemento;
