@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.GrupoConverter;
 import com.algaworks.algafood.api.model.GrupoModel;
+import com.algaworks.algafood.api.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 
 @RestController
 @RequestMapping("/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 
 	@Autowired
 	private CadastroUsuarioService usuarioService;
@@ -34,16 +35,16 @@ public class UsuarioGrupoController {
 	
 	@PutMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
+	public void associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		
 		this.usuarioService.associarGrupo(usuarioId, grupoId);
 	}
 	
 	@DeleteMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void desassociarGrupo(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
+	public void desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		
 		this.usuarioService.desassociarGrupo(usuarioId, grupoId);
 	}
-	
+
 }
