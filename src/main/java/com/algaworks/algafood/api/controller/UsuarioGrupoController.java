@@ -30,7 +30,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	@GetMapping
 	public List<GrupoModel> listar(@PathVariable Long usuarioId){
 		Usuario usuario = this.usuarioService.buscarOuFalhar(usuarioId);
-		return this.grupoConverter.toCollectionModel(usuario.getGrupos());
+		return this.grupoConverter.paraModeloColecao(usuario.getGrupos());
 	}
 	
 	@PutMapping("/{grupoId}")

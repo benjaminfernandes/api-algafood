@@ -32,7 +32,7 @@ public class FotoProdutoModelAssembler implements Converter<FotoProduto, FotoPro
 	}
 
 	@Override
-	public List<FotoProdutoModel> toCollectionModel(Collection<FotoProduto> list) {
+	public List<FotoProdutoModel> paraModeloColecao(Collection<FotoProduto> list) {
 		return null;
 	}
 }

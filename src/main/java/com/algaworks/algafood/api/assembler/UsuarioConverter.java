@@ -29,7 +29,7 @@ public class UsuarioConverter implements Converter<Usuario, UsuarioModel, Usuari
 	}
 
 	@Override
-	public List<UsuarioModel> toCollectionModel(Collection<Usuario> list) {
+	public List<UsuarioModel> paraModeloColecao(Collection<Usuario> list) {
 		return list.stream().map(usuario -> toModel(usuario)).collect(Collectors.toList());
 	}
 

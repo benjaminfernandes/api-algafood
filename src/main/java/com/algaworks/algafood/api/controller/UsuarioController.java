@@ -39,7 +39,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 	
 	@GetMapping
 	public List<UsuarioModel> listar(){
-		return this.usuarioConverter.toCollectionModel(this.usuarioRepository.findAll());
+		return this.usuarioConverter.paraModeloColecao(this.usuarioRepository.findAll());
 	}
 	
 	@GetMapping("/{codigo}")

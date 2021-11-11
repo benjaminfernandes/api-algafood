@@ -31,7 +31,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 	public List<UsuarioModel> listar(@PathVariable Long restauranteId){
 		Restaurante restaurante = this.restauranteService.buscarOuFalhar(restauranteId);
 		
-		return this.usuarioConverter.toCollectionModel(restaurante.getResponsaveis());
+		return this.usuarioConverter.paraModeloColecao(restaurante.getResponsaveis());
 	}
 	
 	@PutMapping("/{usuarioId}")

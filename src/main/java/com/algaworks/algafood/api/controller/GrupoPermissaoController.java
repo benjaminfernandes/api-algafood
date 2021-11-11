@@ -31,7 +31,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	public List<PermissaoModel> listar(@PathVariable Long grupoId){
 		Grupo grupo = this.grupoService.buscarOuFalhar(grupoId);
 		
-		return this.permissaoConverter.toCollectionModel(grupo.getPermissoes());
+		return this.permissaoConverter.paraModeloColecao(grupo.getPermissoes());
 	}
 	
 	@PutMapping("/{permissaoId}")

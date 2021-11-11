@@ -34,7 +34,7 @@ public class PedidoConverter implements Converter<Pedido, PedidoModel, Pedidoinp
 	}
 
 	@Override
-	public List<PedidoModel> toCollectionModel(Collection<Pedido> list) {
+	public List<PedidoModel> paraModeloColecao(Collection<Pedido> list) {
 		
 		return list.stream().map(pedido -> toModel(pedido)).collect(Collectors.toList());
 	}

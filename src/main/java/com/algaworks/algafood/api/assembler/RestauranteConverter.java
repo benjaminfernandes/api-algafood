@@ -39,7 +39,7 @@ public class RestauranteConverter implements Converter<Restaurante, RestauranteM
 
 	//Gera lista para o padrão DTO
 	@Override
-	public List<RestauranteModel> toCollectionModel(Collection<Restaurante> list) {
+	public List<RestauranteModel> paraModeloColecao(Collection<Restaurante> list) {
 		return list.stream().map(restaurante -> toModel(restaurante)).collect(Collectors.toList());
 	}
 

@@ -39,7 +39,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 	@Override
 	@GetMapping
 	public List<GrupoModel> listar(){
-		return this.grupoConverter.toCollectionModel(this.grupoRepository.findAll());
+		return this.grupoConverter.paraModeloColecao(this.grupoRepository.findAll());
 	}
 	
 	@Override

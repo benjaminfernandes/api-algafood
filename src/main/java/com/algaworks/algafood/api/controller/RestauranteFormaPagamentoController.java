@@ -31,7 +31,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	public List<FormaPagamentoModel> listar(@PathVariable Long restauranteId){
 		Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 		
-		return this.formaPagamentoConverter.toCollectionModel(restaurante.getFormasPagamento());
+		return this.formaPagamentoConverter.paraModeloColecao(restaurante.getFormasPagamento());
 	}
 	
 	@DeleteMapping("/{formaPagamentoId}")

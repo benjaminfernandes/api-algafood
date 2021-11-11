@@ -29,7 +29,7 @@ public class GrupoConverter implements Converter<Grupo, GrupoModel, GrupoInput> 
 	}
 
 	@Override
-	public List<GrupoModel> toCollectionModel(Collection<Grupo> list) {
+	public List<GrupoModel> paraModeloColecao(Collection<Grupo> list) {
 		
 		return list.stream().map(grupo -> toModel(grupo)).collect(Collectors.toList());
 	}

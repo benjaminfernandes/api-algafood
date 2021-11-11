@@ -51,7 +51,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 			todosProdutos = this.produtoRepository.findAtivosByRestaurante(restaurante);
 		}
 		
-		return this.produtoConverter.toCollectionModel(todosProdutos);
+		return this.produtoConverter.paraModeloColecao(todosProdutos);
 	}
 	
 	@GetMapping("/{produtoId}")

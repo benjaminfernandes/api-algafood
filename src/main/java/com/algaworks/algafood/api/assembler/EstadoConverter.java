@@ -29,7 +29,7 @@ public class EstadoConverter implements Converter<Estado, EstadoModel, EstadoInp
 	}
 
 	@Override
-	public List<EstadoModel> toCollectionModel(Collection<Estado> list) {
+	public List<EstadoModel> paraModeloColecao(Collection<Estado> list) {
 		return list.stream().map(estado -> toModel(estado)).collect(Collectors.toList());
 	}
 

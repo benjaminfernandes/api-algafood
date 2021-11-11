@@ -37,7 +37,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 
 	@GetMapping
 	public List<EstadoModel> listar() {
-		return this.estadoConverter.toCollectionModel(this.estadoRepository.findAll());
+		return this.estadoConverter.paraModeloColecao(this.estadoRepository.findAll());
 	}
 
 	@PostMapping

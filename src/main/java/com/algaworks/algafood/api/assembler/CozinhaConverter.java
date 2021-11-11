@@ -30,7 +30,7 @@ public class CozinhaConverter implements Converter<Cozinha, CozinhaModel, Cozinh
 	}
 
 	@Override
-	public List<CozinhaModel> toCollectionModel(Collection<Cozinha> list) {
+	public List<CozinhaModel> paraModeloColecao(Collection<Cozinha> list) {
 		return list.stream().map(cozinha -> toModel(cozinha)).collect(Collectors.toList());
 	}
 

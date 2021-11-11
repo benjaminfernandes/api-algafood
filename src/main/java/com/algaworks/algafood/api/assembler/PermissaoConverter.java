@@ -34,7 +34,7 @@ public class PermissaoConverter implements Converter<Permissao, PermissaoModel, 
 	}
 
 	@Override
-	public List<PermissaoModel> toCollectionModel(Collection<Permissao> list) {
+	public List<PermissaoModel> paraModeloColecao(Collection<Permissao> list) {
 		return list.stream().map(permissaoModel -> toModel(permissaoModel)).collect(Collectors.toList());
 	}
 }

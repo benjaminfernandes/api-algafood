@@ -44,7 +44,7 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 		
 		List<CozinhaModel> cozinhasModel = this.cozinhaConverter
-				.toCollectionModel(cozinhasPage.getContent());
+				.paraModeloColecao(cozinhasPage.getContent());
 			
 		Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable,
 				cozinhasPage.getTotalElements());

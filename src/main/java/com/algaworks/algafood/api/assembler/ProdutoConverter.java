@@ -34,7 +34,7 @@ public class ProdutoConverter implements Converter<Produto, ProdutoModel, Produt
 	}
 
 	@Override
-	public List<ProdutoModel> toCollectionModel(Collection<Produto> list) {
+	public List<ProdutoModel> paraModeloColecao(Collection<Produto> list) {
 		return list.stream().map(produto -> toModel(produto)).collect(Collectors.toList());
 	}
 

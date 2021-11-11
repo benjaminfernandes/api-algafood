@@ -67,7 +67,7 @@ public class FormaPagamentoController implements FormaPagamentoOpenApi {
 		}
 		
 		List<FormaPagamentoModel> formasPagamentoModel = this.formaPagamentoConverter
-				.toCollectionModel(this.formaPagamentoRepository.findAll());
+				.paraModeloColecao(this.formaPagamentoRepository.findAll());
 		
 		return ResponseEntity.ok()
 				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) //adiciona cache de 10 seg.

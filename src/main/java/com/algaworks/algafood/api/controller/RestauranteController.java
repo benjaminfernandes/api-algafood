@@ -44,7 +44,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	  @JsonView(RestauranteView.Resumo.class)
 	  @GetMapping 
 	  public List<RestauranteModel> listar(){ 
-		  return restauranteConverter.toCollectionModel(restauranteRepository.findAll()); 
+		  return restauranteConverter.paraModeloColecao(restauranteRepository.findAll()); 
 	  }
 	  
 	  @JsonView(RestauranteView.ApenasNome.class)

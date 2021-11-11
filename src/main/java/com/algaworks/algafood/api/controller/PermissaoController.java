@@ -36,7 +36,7 @@ public class PermissaoController {
 	
 	@GetMapping
 	public List<PermissaoModel> listar(){
-		return this.permissaoConverter.toCollectionModel(this.permissaoRepository.findAll());
+		return this.permissaoConverter.paraModeloColecao(this.permissaoRepository.findAll());
 	}
 	
 	@GetMapping("/{permissaoId}")

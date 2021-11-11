@@ -29,7 +29,7 @@ public class FormaPagamentoConverter implements Converter<FormaPagamento, FormaP
 	}
 
 	@Override
-	public List<FormaPagamentoModel> toCollectionModel(Collection<FormaPagamento> list) {
+	public List<FormaPagamentoModel> paraModeloColecao(Collection<FormaPagamento> list) {
 		return list.stream().map(formaPagamento -> toModel(formaPagamento)).collect(Collectors.toList());
 	}
 
