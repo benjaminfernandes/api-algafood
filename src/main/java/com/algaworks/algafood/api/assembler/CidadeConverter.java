@@ -30,7 +30,6 @@ public class CidadeConverter extends RepresentationModelAssemblerSupport<Cidade,
 
 	@Autowired
 	private ModelMapper modelMapper;
-	
 
 	@Override
 	public Cidade toDomain(CidadeInput inputModel) {
