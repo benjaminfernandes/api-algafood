@@ -16,6 +16,7 @@ public interface PedidoRepository extends CustomJpaRepository<Pedido, Long>,
 	@Query("from Pedido p join fetch p.cliente join fetch p.restaurante r join fetch r.cozinha join fetch p.formaPagamento")
 	List<Pedido> findAll();
 	
+	@Query("from Pedido p join fetch p.itens it join fetch it.produto prod join fetch p.cliente join fetch p.restaurante r join fetch r.cozinha join fetch p.formaPagamento where p.codigo = :codigo")
 	Optional<Pedido> findByCodigo(String codigo);
 	
 }

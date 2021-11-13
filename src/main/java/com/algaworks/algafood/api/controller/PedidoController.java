@@ -1,15 +1,15 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,9 +45,11 @@ public class PedidoController implements PedidoControllerOpenApi{
 	private PedidoConverter pedidoConverter;
 	@Autowired
 	private PedidoResumoConverter pedidoResumoConverter;
+	@Autowired
+	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 	
 	@GetMapping
-	public Page<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
+	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
 			@PageableDefault(size=10) Pageable pageable){
 		
 		traduzirPageable(pageable);
@@ -55,14 +57,17 @@ public class PedidoController implements PedidoControllerOpenApi{
 		Page<Pedido> pedidosPage = this.pedidoRepository
 				.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
 		
-		List<PedidoResumoModel> pedidosModel = this.pedidoResumoConverter
+		/*List<PedidoResumoModel> pedidosModel = this.pedidoResumoConverter
 				.toCollectionModel(pedidosPage.getContent());
 		
 		Page<PedidoResumoModel> pedidoResumoModelPage = new 
 				PageImpl<PedidoResumoModel>(pedidosModel, pageable, 
 						pedidosPage.getTotalElements());
+		*/
+		PagedModel<PedidoResumoModel> pagedPedidoResumoModel = this.pagedResourcesAssembler
+				.toModel(pedidosPage, pedidoResumoConverter);
 		
-		return pedidoResumoModelPage;
+		return pagedPedidoResumoModel;
 	}
 	
 	@GetMapping("/{codigoPedido}")

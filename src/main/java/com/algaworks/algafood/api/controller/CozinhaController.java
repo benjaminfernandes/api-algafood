@@ -1,14 +1,13 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,18 +37,18 @@ public class CozinhaController implements CozinhaControllerOpenApi{
 	private CadastroService<Cozinha> cadastroCozinha;
 	@Autowired
 	private CozinhaConverter cozinhaConverter;
+	@Autowired
+	private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
 	@GetMapping
-	public Page<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+	public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 		
-		List<CozinhaModel> cozinhasModel = this.cozinhaConverter
-				.paraModeloColecao(cozinhasPage.getContent());
-			
-		Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable,
-				cozinhasPage.getTotalElements());
+		//Aula hateoas 19.15
+		PagedModel<CozinhaModel> cozinhasPagedModel = this.pagedResourcesAssembler
+				.toModel(cozinhasPage, cozinhaConverter);
 		
-		return cozinhasModelPage;
+		return cozinhasPagedModel;
 	}
 
 	@GetMapping("/{cozinhaId}")

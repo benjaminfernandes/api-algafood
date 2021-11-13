@@ -1,28 +1,38 @@
 package com.algaworks.algafood.api.assembler;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.controller.PedidoController;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.domain.model.Pedido;
 
 @Component
-public class PedidoResumoConverter {
+public class PedidoResumoConverter extends RepresentationModelAssemblerSupport<Pedido, PedidoResumoModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
-
-	public PedidoResumoModel toModel(Pedido domain) {
-		
-		return this.modelMapper.map(domain, PedidoResumoModel.class);
+	
+	public PedidoResumoConverter() {
+		super(PedidoController.class, PedidoResumoModel.class);
 	}
 
-	public List<PedidoResumoModel> toCollectionModel(Collection<Pedido> list) {
+	public PedidoResumoModel toModel(Pedido domain) {
+		PedidoResumoModel pedidoResumoModel = createModelWithId(domain.getCodigo(), domain);
+		this.modelMapper.map(domain, pedidoResumoModel);
+		pedidoResumoModel.add(linkTo(PedidoController.class).withSelfRel());
+		return pedidoResumoModel;
+	}
+
+	public List<PedidoResumoModel> paraModeloColecao(Collection<Pedido> list) {
 		return list.stream().map(pedido -> toModel(pedido)).collect(Collectors.toList());
 	}
 	
