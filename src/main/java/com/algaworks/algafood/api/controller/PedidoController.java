@@ -25,6 +25,7 @@ import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.Pedidoinput;
 import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenApi;
+import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
@@ -52,10 +53,10 @@ public class PedidoController implements PedidoControllerOpenApi{
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
 			@PageableDefault(size=10) Pageable pageable){
 		
-		traduzirPageable(pageable);
+		Pageable pageableTraduzido = traduzirPageable(pageable);
 		
 		Page<Pedido> pedidosPage = this.pedidoRepository
-				.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
+				.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageableTraduzido);
 		
 		/*List<PedidoResumoModel> pedidosModel = this.pedidoResumoConverter
 				.toCollectionModel(pedidosPage.getContent());
@@ -64,6 +65,8 @@ public class PedidoController implements PedidoControllerOpenApi{
 				PageImpl<PedidoResumoModel>(pedidosModel, pageable, 
 						pedidosPage.getTotalElements());
 		*/
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
+		
 		PagedModel<PedidoResumoModel> pagedPedidoResumoModel = this.pagedResourcesAssembler
 				.toModel(pedidosPage, pedidoResumoConverter);
 		
