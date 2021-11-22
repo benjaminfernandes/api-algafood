@@ -39,9 +39,17 @@ public class PedidoConverter extends RepresentationModelAssemblerSupport<Pedido,
 		
 		pedidoModel.add(algalinks.linkToPedidos());
 		
-		pedidoModel.add(algalinks.linkToConfirmacaoPedido(domain.getCodigo(), "confirmar"));
-		pedidoModel.add(algalinks.linkToCancelamentoPedido(domain.getCodigo(), "cancelar"));
-		pedidoModel.add(algalinks.linkToEntregaPedido(domain.getCodigo(), "entregar"));
+		if(domain.podeSerConfirmado()) {
+			pedidoModel.add(algalinks.linkToConfirmacaoPedido(domain.getCodigo(), "confirmar"));
+		}
+		
+		if(domain.podeSerCancelado()) {
+			pedidoModel.add(algalinks.linkToCancelamentoPedido(domain.getCodigo(), "cancelar"));
+		}
+		
+		if(domain.podeSerEntregue()) {
+			pedidoModel.add(algalinks.linkToEntregaPedido(domain.getCodigo(), "entregar"));
+		}
 		
 		//pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
 		

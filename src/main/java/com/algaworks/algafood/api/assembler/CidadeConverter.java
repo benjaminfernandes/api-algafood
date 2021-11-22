@@ -1,7 +1,5 @@
 package com.algaworks.algafood.api.assembler;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +71,7 @@ public class CidadeConverter extends RepresentationModelAssemblerSupport<Cidade,
 	@Override
 	public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
 		return super.toCollectionModel(entities)
-				.add(linkTo(CidadeController.class).withSelfRel());
+	            .add(algaLinks.linkToCidades());
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.algaworks.algafood.api.assembler;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,7 +64,7 @@ public class UsuarioConverter extends RepresentationModelAssemblerSupport<Usuari
 	@Override
 	public CollectionModel<UsuarioModel> toCollectionModel(Iterable<? extends Usuario> entities) {
 		return super.toCollectionModel(entities)
-				.add(linkTo(UsuarioController.class).withSelfRel());
+		        .add(algaLinks.linkToUsuarios());
 	}
 
 }
