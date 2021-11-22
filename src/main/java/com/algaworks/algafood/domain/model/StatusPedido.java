@@ -7,6 +7,7 @@ public enum StatusPedido {
 
 	CRIADO("Criado"),
 	CONFIRMADO("Confirmado", CRIADO),
+	
 	ENTREGUE("Entregue", CONFIRMADO),
 	CANCELADO("Cancelado", CRIADO, CONFIRMADO);
 	
