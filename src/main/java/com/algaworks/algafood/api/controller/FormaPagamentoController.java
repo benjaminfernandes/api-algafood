@@ -1,12 +1,12 @@
 package com.algaworks.algafood.api.controller;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +51,7 @@ public class FormaPagamentoController implements FormaPagamentoOpenApi {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request){
+	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request){
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		
 		String eTag = "0";
@@ -66,8 +66,8 @@ public class FormaPagamentoController implements FormaPagamentoOpenApi {
 			return null;
 		}
 		
-		List<FormaPagamentoModel> formasPagamentoModel = this.formaPagamentoConverter
-				.paraModeloColecao(this.formaPagamentoRepository.findAll());
+		CollectionModel<FormaPagamentoModel> formasPagamentoModel = this.formaPagamentoConverter
+				.toCollectionModel(this.formaPagamentoRepository.findAll());
 		
 		return ResponseEntity.ok()
 				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) //adiciona cache de 10 seg.

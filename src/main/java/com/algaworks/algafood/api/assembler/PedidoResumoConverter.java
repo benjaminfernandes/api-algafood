@@ -30,7 +30,7 @@ public class PedidoResumoConverter extends RepresentationModelAssemblerSupport<P
 		PedidoResumoModel pedidoResumoModel = createModelWithId(domain.getCodigo(), domain);
 		this.modelMapper.map(domain, pedidoResumoModel);
 		//pedidoResumoModel.add(linkTo(PedidoController.class).withSelfRel());
-		pedidoResumoModel.add(algaLinks.linkToPedidos());
+		pedidoResumoModel.add(algaLinks.linkToPedidos("pedidos"));
 		//pedidoResumoModel.getCliente().add(algaLinks.linkToUsuario(domain.getCliente().getId()));
 		return pedidoResumoModel;
 	}

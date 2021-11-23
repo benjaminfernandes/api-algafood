@@ -62,6 +62,26 @@ public class RestauranteConverter extends RepresentationModelAssemblerSupport<Re
         restauranteModel.add(algaLinks.linkToRestauranteResponsaveis(domain.getId(), 
                 "responsaveis"));
         
+        if (domain.ativacaoPermitida()) {
+        	restauranteModel.add(
+        			algaLinks.linkToRestauranteAtivacao(domain.getId(), "ativar"));
+        }
+
+        if (domain.inativacaoPermitida()) {
+        	restauranteModel.add(
+        			algaLinks.linkToRestauranteInativacao(domain.getId(), "inativar"));
+        }
+
+        if (domain.aberturaPermitida()) {
+        	restauranteModel.add(
+        			algaLinks.linkToRestauranteAbertura(domain.getId(), "abrir"));
+        }
+
+        if (domain.fechamentoPermitido()) {
+        	restauranteModel.add(
+        			algaLinks.linkToRestauranteFechamento(domain.getId(), "fechar"));
+        }
+        
         return restauranteModel;
 	}
 
@@ -84,8 +104,8 @@ public class RestauranteConverter extends RepresentationModelAssemblerSupport<Re
 	}
 	
 	 @Override
-	    public CollectionModel<RestauranteModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
-	        return super.toCollectionModel(entities)
-	                .add(algaLinks.linkToRestaurantes());
+	 public CollectionModel<RestauranteModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
+	      return super.toCollectionModel(entities)
+	              .add(algaLinks.linkToRestaurantes("restaurantes"));
 	    }   
 }

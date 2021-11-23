@@ -37,7 +37,7 @@ public class PedidoConverter extends RepresentationModelAssemblerSupport<Pedido,
 		PedidoModel pedidoModel = createModelWithId(domain.getCodigo(), domain);
 		this.modelMapper.map(domain, pedidoModel);
 		
-		pedidoModel.add(algalinks.linkToPedidos());
+		pedidoModel.add(algalinks.linkToPedidos("pedidos"));
 		
 		if(domain.podeSerConfirmado()) {
 			pedidoModel.add(algalinks.linkToConfirmacaoPedido(domain.getCodigo(), "confirmar"));
@@ -70,9 +70,6 @@ public class PedidoConverter extends RepresentationModelAssemblerSupport<Pedido,
                     .buscar(pedidoModel.getRestaurante().getId(), item.getProdutoId()))
                     .withRel("produto"));
         });*/
-	    modelMapper.map(domain, pedidoModel);
-	    
-	    pedidoModel.add(algalinks.linkToPedidos());
 	    
 	    pedidoModel.getRestaurante().add(
 	            algalinks.linkToRestaurante(domain.getRestaurante().getId()));
