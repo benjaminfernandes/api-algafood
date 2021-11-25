@@ -53,8 +53,11 @@ public class RestauranteConverter extends RepresentationModelAssemblerSupport<Re
         restauranteModel.getCozinha().add(
                 algaLinks.linkToCozinha(domain.getCozinha().getId()));
         
-        restauranteModel.getEndereco().getCidade().add(
-                algaLinks.linkToCidade(domain.getEndereco().getCidade().getId()));
+        if (restauranteModel.getEndereco() != null 
+                && restauranteModel.getEndereco().getCidade() != null) {
+            restauranteModel.getEndereco().getCidade().add(
+                    algaLinks.linkToCidade(domain.getEndereco().getCidade().getId()));
+        }
         
         restauranteModel.add(algaLinks.linkToRestauranteFormasPagamento(domain.getId(), 
                 "formas-pagamento"));

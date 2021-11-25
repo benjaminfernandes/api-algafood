@@ -108,8 +108,6 @@ public class CadastroCozinhaIT {
 			.statusCode(HttpStatus.NOT_FOUND.value());
 	}
 	
-	
-	
 	private void prepararDados() {
 		Cozinha cozinha1 = new Cozinha();
 		cozinha1.setNome("Tailandesa");
