@@ -6,17 +6,27 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.Algalinks;
+import com.algaworks.algafood.api.controller.GrupoController;
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.api.model.input.GrupoInput;
 import com.algaworks.algafood.domain.model.Grupo;
 
 @Component
-public class GrupoConverter implements Converter<Grupo, GrupoModel, GrupoInput> {
+public class GrupoConverter extends RepresentationModelAssemblerSupport<Grupo, GrupoModel> implements Converter<Grupo, GrupoModel, GrupoInput> {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+    private Algalinks algaLinks;
+    
+    public GrupoConverter() {
+        super(GrupoController.class, GrupoModel.class);
+    }
 	
 	@Override
 	public Grupo toDomain(GrupoInput inputModel) {
@@ -25,7 +35,13 @@ public class GrupoConverter implements Converter<Grupo, GrupoModel, GrupoInput> 
 
 	@Override
 	public GrupoModel toModel(Grupo domain) {
-		return this.modelMapper.map(domain, GrupoModel.class);
+		
+		GrupoModel grupoModel = createModelWithId(domain.getId(), domain);
+		this.modelMapper.map(domain, grupoModel);
+		grupoModel.add(algaLinks.linkToGrupos("grupos"));
+		grupoModel.add(algaLinks.linkToGrupoPermissoes(domain.getId(), "permissoes"));
+		
+		return grupoModel;
 	}
 
 	@Override
@@ -37,5 +53,11 @@ public class GrupoConverter implements Converter<Grupo, GrupoModel, GrupoInput> 
 	@Override
 	public void copyToDomainObject(GrupoInput inputModel, Grupo grupo) {
 		this.modelMapper.map(inputModel, grupo);
+	}
+	
+	@Override
+	public CollectionModel<GrupoModel> toCollectionModel(Iterable<? extends Grupo> entities) {
+		return super.toCollectionModel(entities)
+				.add(algaLinks.linkToGrupos());
 	}
 }
