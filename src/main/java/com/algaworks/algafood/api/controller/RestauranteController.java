@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.RestauranteApenasNomeModelAssembler;
+import com.algaworks.algafood.api.assembler.RestauranteBasicoModelAssembler;
 import com.algaworks.algafood.api.assembler.RestauranteConverter;
 import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
+import com.algaworks.algafood.api.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenApi;
@@ -43,12 +45,15 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	@Autowired
 	private RestauranteConverter restauranteConverter;
 	@Autowired
+	private RestauranteBasicoModelAssembler restauranteBasicoConverter;
+	
+	@Autowired
 	private RestauranteApenasNomeModelAssembler restauranteApenasNomeConverter;
 	
 	  //@JsonView(RestauranteView.Resumo.class)
 	  @GetMapping 
-	  public CollectionModel<RestauranteModel> listar(){ 
-		  return restauranteConverter.toCollectionModel(restauranteRepository.findAll()); 
+	  public CollectionModel<RestauranteBasicoModel> listar(){ 
+		  return restauranteBasicoConverter.toCollectionModel(restauranteRepository.findAll()); 
 	  }
 	  
 	  //@JsonView(RestauranteView.ApenasNome.class)
@@ -105,7 +110,6 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput){
-		
 		try {
 			Restaurante restaurante = restauranteConverter.toDomain(restauranteInput);
 			return restauranteConverter.toModel(cadastroRestaurante.salvar(restaurante));
