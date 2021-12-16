@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.algaworks.algafood.core.storage.StorageProperties.TipoStorage;
-import com.algaworks.algafood.domain.repository.infraestructure.service.storage.LocalFotoStorageService;
-import com.algaworks.algafood.domain.repository.infraestructure.service.storage.S3FotoStorageService;
 import com.algaworks.algafood.domain.service.FotoStorageService;
+import com.algaworks.algafood.infraestructure.service.storage.LocalFotoStorageService;
+import com.algaworks.algafood.infraestructure.service.storage.S3FotoStorageService;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
