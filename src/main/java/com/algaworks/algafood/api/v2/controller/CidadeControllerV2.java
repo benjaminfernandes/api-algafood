@@ -1,4 +1,4 @@
-package com.algaworks.algafood.api.v1.controller;
+package com.algaworks.algafood.api.v2.controller;
 
 import java.util.List;
 
@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.ResourceUriHelper;
-import com.algaworks.algafood.api.v1.assembler.CidadeConverter;
-import com.algaworks.algafood.api.v1.model.CidadeModel;
-import com.algaworks.algafood.api.v1.model.input.CidadeInput;
-import com.algaworks.algafood.api.v1.openapi.controller.CidadeControllerOpenApi;
+import com.algaworks.algafood.api.v2.assembler.CidadeConverterV2;
+import com.algaworks.algafood.api.v2.model.CidadeModelV2;
+import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
 import com.algaworks.algafood.core.web.AlgaMediaTypes;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -29,20 +28,20 @@ import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroService;
 
-//Ajustes a serem feitos aula 20.10
+//Ajustes a serem feitos aula 20.11
 @RestController
-@RequestMapping(path = "/cidades", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
-public class CidadeController implements CidadeControllerOpenApi {
+@RequestMapping(path = "/cidades", produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+public class CidadeControllerV2{
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
 	@Autowired
 	private CadastroService<Cidade> cadastroCidadeService;
 	@Autowired
-	private CidadeConverter cidadeConverter;
+	private CidadeConverterV2 cidadeConverter;
 	
 	@GetMapping
-	public CollectionModel<CidadeModel> listar() {
+	public CollectionModel<CidadeModelV2> listar() {
 		List<Cidade> todasCidades = this.cidadeRepository.findAll();
 		//cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
 		return this.cidadeConverter.toCollectionModel(todasCidades);
@@ -50,14 +49,14 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CidadeModel salvar(@RequestBody @Valid CidadeInput cidadeInput) {
+	public CidadeModelV2 salvar(@RequestBody @Valid CidadeInputV2 cidadeInput) {
 		try {
 			Cidade cidade = this.cidadeConverter.toDomain(cidadeInput);
 			cidade = this.cadastroCidadeService.salvar(cidade);
 			
-			CidadeModel cidadeModel =  this.cidadeConverter.toModel(cidade);
+			CidadeModelV2 cidadeModel =  this.cidadeConverter.toModel(cidade);
 			//Aula 19.2
-			ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+			ResourceUriHelper.addUriInResponseHeader(cidadeModel.getIdCidade());
 			
 			return cidadeModel;
 		} catch (EstadoNaoEncontradaException e) {
@@ -66,10 +65,10 @@ public class CidadeController implements CidadeControllerOpenApi {
 	}
 
 	@GetMapping("/{cidadeId}")
-	public CidadeModel buscar(@PathVariable Long cidadeId) {
+	public CidadeModelV2 buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = this.cadastroCidadeService.buscarOuFalhar(cidadeId);
 		
-		CidadeModel cidadeModel = this.cidadeConverter.toModel(cidade);
+		CidadeModelV2 cidadeModel = this.cidadeConverter.toModel(cidade);
 		
 		//Link link = linkTo(methodOn(CidadeController.class).buscar(cidadeModel.getId())).withSelfRel();
 		
@@ -103,8 +102,8 @@ public class CidadeController implements CidadeControllerOpenApi {
 	}
 
 	@PutMapping("/{cidadeId}")
-	public CidadeModel atualizar(@PathVariable Long cidadeId, 
-					@RequestBody @Valid CidadeInput cidadeInput) {
+	public CidadeModelV2 atualizar(@PathVariable Long cidadeId, 
+					@RequestBody @Valid CidadeInputV2 cidadeInput) {
 
 		try {
 			Cidade cidadeAtual = this.cadastroCidadeService.buscarOuFalhar(cidadeId);

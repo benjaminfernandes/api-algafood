@@ -1,4 +1,4 @@
-package com.algaworks.algafood.api.v1.assembler;
+package com.algaworks.algafood.api.converter;
 
 import java.util.Collection;
 import java.util.List;
