@@ -17,7 +17,7 @@ public class RootEntryPointController {
 	@Autowired
 	private Algalinks algaLinks;
 
-	@GetMapping
+	@GetMapping("/v1")
 	public RootEntryPointModel root() {
 		var rootEntryPointModel = new RootEntryPointModel();
 		

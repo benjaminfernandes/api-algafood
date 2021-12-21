@@ -11,7 +11,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.converter.Converter;
-import com.algaworks.algafood.api.v1.Algalinks;
+import com.algaworks.algafood.api.v2.AlgalinksV2;
 import com.algaworks.algafood.api.v2.controller.CidadeControllerV2;
 import com.algaworks.algafood.api.v2.model.CidadeModelV2;
 import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
@@ -29,7 +29,7 @@ public class CidadeConverterV2 extends RepresentationModelAssemblerSupport<Cidad
 	@Autowired
 	private ModelMapper modelMapper;
 	@Autowired
-	private Algalinks algaLinks;
+	private AlgalinksV2 algaLinks;
 
 	@Override
 	public Cidade toDomain(CidadeInputV2 inputModel) {

@@ -24,7 +24,7 @@ import com.algaworks.algafood.domain.repository.PermissaoRepository;
 import com.algaworks.algafood.domain.service.CadastroPermissaoService;
 
 @RestController
-@RequestMapping("/permissoes")
+@RequestMapping("/v1/permissoes")
 public class PermissaoController implements PermissaoControllerOpenApi {
 
 	@Autowired
