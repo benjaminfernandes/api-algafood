@@ -69,6 +69,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SpringFoxConfig implements WebMvcConfigurer {
 
+	//Se quiser excluir a documentação da V1, basta excluir o método apiDocketV1()
 	@Bean
 	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
@@ -219,8 +220,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 	}
 
 	private ApiInfo apiInfoV1() {
-		return new ApiInfoBuilder().title("AlgaFood Api")
-				.description("API Aberta para clientes e restaurantes")
+		return new ApiInfoBuilder().title("AlgaFood Api (Depreciada)")
+				.description("API Aberta para clientes e restaurantes. <br>"
+						+"<strong>Essa versão da API está depreciada e deixará de existir a partir de 31/12/2021</strong>"
+						+"<br> Use a versão mais atual da API")	
 				.version("1").contact(new Contact("Benjamin", "https:www.benja.com.br", 
 						"benjamin@benja.com.br"))
 				.build();

@@ -41,6 +41,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired
 	private CidadeConverter cidadeConverter;
 	
+	@Deprecated
 	@GetMapping
 	public CollectionModel<CidadeModel> listar() {
 		List<Cidade> todasCidades = this.cidadeRepository.findAll();
