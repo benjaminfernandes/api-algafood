@@ -22,6 +22,7 @@ import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.v2.assembler.CidadeConverterV2;
 import com.algaworks.algafood.api.v2.model.CidadeModelV2;
 import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
+import com.algaworks.algafood.api.v2.openapi.controller.CidadeControllerV2OpenApi;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
@@ -31,7 +32,7 @@ import com.algaworks.algafood.domain.service.CadastroService;
 //Ajustes a serem feitos aula 20.11
 @RestController
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2{
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi{
 
 	@Autowired
 	private CidadeRepository cidadeRepository;

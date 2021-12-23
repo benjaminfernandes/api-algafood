@@ -45,6 +45,8 @@ import com.algaworks.algafood.api.v1.openapi.model.PermissoesModelOpenApi;
 import com.algaworks.algafood.api.v1.openapi.model.ProdutosModelOpenApi;
 import com.algaworks.algafood.api.v1.openapi.model.RestaurantesBasicoModelOpenApi;
 import com.algaworks.algafood.api.v1.openapi.model.UsuariosModelOpenApi;
+import com.algaworks.algafood.api.v2.model.CidadeModelV2;
+import com.algaworks.algafood.api.v2.openapi.model.CidadesModelV2OpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -68,17 +70,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SpringFoxConfig implements WebMvcConfigurer {
 
 	@Bean
-	public Docket apiDocket() {
+	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 		
-		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api")).paths(PathSelectors.any())
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("V1")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api"))
+				.paths(PathSelectors.ant("/v1/**"))
 				// .paths(PathSelectors.ant("/restaurantes/*"))
 				.build().useDefaultResponseMessages(false)
 				.globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
 				.globalResponseMessage(RequestMethod.POST, globalPostResponseMessages())
 				.globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
-				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages()).apiInfo(apiInfo())
+				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages()).apiInfo(apiInfoV1())
 				/*.globalOperationParameters(Arrays.asList(
 						new ParameterBuilder()
 							.name("campos")
@@ -134,6 +139,33 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 						new Tag("Estatísticas", "Estatísticas da AlgaFood"),
 						new Tag("Permissões", "Gerencia as permissões"));
 	}
+	
+	@Bean
+	public Docket apiDocketV2() {
+		var typeResolver = new TypeResolver();
+		
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("V2")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api"))
+				.paths(PathSelectors.ant("/v2/**"))
+				.build().useDefaultResponseMessages(false)
+				.globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
+				.globalResponseMessage(RequestMethod.POST, globalPostResponseMessages())
+				.globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
+				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
+				.apiInfo(apiInfoV2())
+				.additionalModels(typeResolver.resolve(Problem.class))
+				.ignoredParameterTypes(ServletWebRequest.class, URL.class, 
+						URI.class, URLStreamHandler.class, Resource.class, File.class, 
+						InputStream.class)
+				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)//aula 18.20
+				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
+				.alternateTypeRules(AlternateTypeRules.newRule(
+					        typeResolver.resolve(CollectionModel.class, CidadeModelV2.class),
+					        CidadesModelV2OpenApi.class))
+				.tags(new Tag("Cidades", "Gerencia as cidades"));
+	}
 
 	private List<ResponseMessage> globalGetResponseMessages() {
 		return Arrays.asList(
@@ -186,13 +218,23 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 						.message("Recurso não possui representação que poderia ser aceita pelo consumidor").build());
 	}
 
-	private ApiInfo apiInfo() {
+	private ApiInfo apiInfoV1() {
 		return new ApiInfoBuilder().title("AlgaFood Api")
 				.description("API Aberta para clientes e restaurantes")
 				.version("1").contact(new Contact("Benjamin", "https:www.benja.com.br", 
 						"benjamin@benja.com.br"))
 				.build();
 	}
+	
+	private ApiInfo apiInfoV2() {
+		return new ApiInfoBuilder().title("AlgaFood Api")
+				.description("API Aberta para clientes e restaurantes")
+				.version("2")
+				.contact(new Contact("Benjamin", "https:www.benja.com.br", 
+						"benjamin@benja.com.br"))
+				.build();
+	}
+
 
 	private List<ResponseMessage> globalDeleteResponseMessages() {
 		return Arrays.asList(
