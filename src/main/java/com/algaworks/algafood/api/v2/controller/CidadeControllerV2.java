@@ -29,11 +29,16 @@ import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroService;
 
+import lombok.extern.slf4j.Slf4j;
+
 //Ajustes a serem feitos aula 20.11
+@Slf4j
 @RestController
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeControllerV2 implements CidadeControllerV2OpenApi{
 
+	//private static final Logger logger = LoggerFactory.getLogger(CidadeControllerV2.class);
+	
 	@Autowired
 	private CidadeRepository cidadeRepository;
 	@Autowired
@@ -43,8 +48,11 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi{
 	
 	@GetMapping
 	public CollectionModel<CidadeModelV2> listar() {
+		//logger.info("Listando cidades como teste {}...", "inserido por parâmetro");
+		log.info("Listando cidades como teste {}...", "inserido por parâmetro");//aqui usando o lombok
 		List<Cidade> todasCidades = this.cidadeRepository.findAll();
 		//cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
+		
 		return this.cidadeConverter.toCollectionModel(todasCidades);
 	}
 
