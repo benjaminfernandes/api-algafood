@@ -15,6 +15,8 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.anyRequest().authenticated()
 			.and()
+			.cors()//Spring security permite o OPTIONS 
+			.and()
 			.oauth2ResourceServer().opaqueToken();
 				
 			/*.and()
