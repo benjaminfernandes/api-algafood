@@ -1,14 +1,9 @@
 package com.algaworks.algafood.core.security;
 
-import javax.crypto.spec.SecretKeySpec;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
 @EnableWebSecurity
 @Configuration
@@ -35,10 +30,13 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 		//csrf evita que o seja usado o sessionId em requisições quando a API não é stateless, se o sessionID é capturado por um hacker ele pode usá-lo para enviar requisições sem as credenciais
 	}
 	
-	@Bean
+	//Configuração quando utiliza chave simétrica - utiliza o mesmo segredo
+	/*@Bean
 	public JwtDecoder jwtDecoder() {
 		var secret = new SecretKeySpec("8a9sf5asdf6a4sd6f48sd45fa4sd65f48asd4f65ad4sf8d5d5d5d8sa65".getBytes(), "HmacSHA256");
 		
 		return NimbusJwtDecoder.withSecretKey(secret).build();
-	}
+	}*/
+	
+	
 }
