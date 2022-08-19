@@ -40,19 +40,15 @@ public class Usuario {
 	@JoinTable(name="usuario_grupo", joinColumns = @JoinColumn(name="usuario_id"), inverseJoinColumns = @JoinColumn(name="grupo_id"))
 	private Set<Grupo> grupos = new HashSet<>();
 	
-	public boolean senhaCoincidem(String senha) {
-		return getSenha().equals(senha);
-	}
-	
-	public boolean senhaNaoCoincidem(String senha) {
-		return !senhaCoincidem(senha);
-	}
-	
 	public void adicionaGrupo(Grupo grupo) {
 		this.grupos.add(grupo);
 	}
 	
 	public void removerGrupo(Grupo grupo) {
 		this.grupos.remove(grupo);
+	}
+	
+	public boolean isNovo() {
+	    return getId() == null;
 	}
 }
