@@ -27,6 +27,7 @@ import com.algaworks.algafood.api.v1.model.input.Pedidoinput;
 import com.algaworks.algafood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
@@ -48,6 +49,8 @@ public class PedidoController implements PedidoControllerOpenApi{
 	private PedidoResumoConverter pedidoResumoConverter;
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	@Autowired
+	private AlgaSecurity algaSecurity;
 	
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
@@ -83,9 +86,9 @@ public class PedidoController implements PedidoControllerOpenApi{
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoModel salvar(@Valid @RequestBody Pedidoinput pedidoInput) {
 		Pedido pedido = this.pedidoConverter.toDomain(pedidoInput);
-		// TODO pegar usuário autenticado
-        pedido.setCliente(new Usuario());
-        pedido.getCliente().setId(1L);
+
+		pedido.setCliente(new Usuario());
+        pedido.getCliente().setId(algaSecurity.getUsuarioId());
 	
         pedido = this.pedidoService.salvar(pedido);
         
