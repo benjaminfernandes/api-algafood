@@ -1,24 +1,30 @@
 package com.algaworks.algafood.core.security;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
+
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 
 @EnableWebSecurity
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.authorizeRequests()
-				.anyRequest().authenticated()
-			.and()
+			.csrf().disable()
 			.cors()//Spring security permite o OPTIONS 
 			.and()
 			.oauth2ResourceServer()
-			.jwt();
+			.jwt()
+			.jwtAuthenticationConverter(jwtAuthenticationConverter());
 			//.opaqueToken(); para tokens opacos e que utilizem introspeccao 
 				
 			/*.and()
@@ -28,6 +34,24 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 				.and()
 					.csrf().disable(); */
 		//csrf evita que o seja usado o sessionId em requisições quando a API não é stateless, se o sessionID é capturado por um hacker ele pode usá-lo para enviar requisições sem as credenciais
+	}
+	
+	//Extrai as authorities do jwt recebido
+	private JwtAuthenticationConverter jwtAuthenticationConverter() {
+		var jwtAuthenticationConverter = new JwtAuthenticationConverter();
+		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
+			var authorities = jwt.getClaimAsStringList("authorities");
+			
+			if(authorities == null) {
+				authorities = Collections.emptyList();
+			}
+			
+			return authorities.stream().map(SimpleGrantedAuthority::new)
+					.collect(Collectors.toList());
+		});
+		
+		
+		return jwtAuthenticationConverter;
 	}
 	
 	//Configuração quando utiliza chave simétrica - utiliza o mesmo segredo
