@@ -17,6 +17,7 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		public @interface PodeEditar{}
 		
+		//@PreAuthorize("@securityService.listarCozinhas()") opção utilizando o securityService
 		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
@@ -28,7 +29,14 @@ public @interface CheckSecurity {
 	    @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
 	    @Retention(RUNTIME)
 	    @Target(METHOD)
-	    public @interface PodeEditar { }
+	    public @interface PodeGerenciarCadastro { }
+	    
+	    @PreAuthorize("hasAuthority('SCOPE_WRITE') and "
+	    		+ "(hasAuthority('EDITAR_RESTAURANTES') or "
+	    		+ "@algaSecurity.gerenciaRestaurante(#restauranteId))")//o @ dá acesso ao bean do spring o # dá o acesso à variável passada pelo método
+	    @Retention(RUNTIME)
+	    @Target(METHOD)
+	    public @interface PodeGerenciarFuncionamento { }
 
 	    @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
 	    @Retention(RUNTIME)

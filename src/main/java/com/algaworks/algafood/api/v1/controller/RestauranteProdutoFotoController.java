@@ -50,7 +50,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
 	
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, 
 			@Valid FotoProdutoInput fotoProdutoInput, 
@@ -71,7 +71,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
 	}
 	
-	@CheckSecurity.Restaurantes.PodeConsultar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@GetMapping
 	public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		FotoProduto foto = this.catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
@@ -106,7 +106,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		}
 	}
 	
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long restauranteId, @PathVariable Long produtoId) {

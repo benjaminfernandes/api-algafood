@@ -70,7 +70,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return this.produtoConverter.toModel(produto);
 	}
 	
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoModel adicionar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
@@ -81,7 +81,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return this.produtoConverter.toModel(produto);
 	}
 	
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping("/{produtoId}")
 	public ProdutoModel atualizar(@PathVariable Long restauranteId ,@PathVariable Long produtoId,@RequestBody @Valid ProdutoInput produtoInput) {
 		Produto produto = this.produtoService.buscarOuFalhar(produtoId);
@@ -90,7 +90,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return this.produtoConverter.toModel(produto);
 	}
 	
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@DeleteMapping("produtoId")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long produtoId) {

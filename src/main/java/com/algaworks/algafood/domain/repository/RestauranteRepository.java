@@ -21,6 +21,7 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 	List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 	
 	//@Query("from Restaurante where nome like %:nome% and cozinha.id = :id")
+	//adicionado query no arquivo orm.xml
 	List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
 	
 	//List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
@@ -29,4 +30,7 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 	List<Restaurante> findTop2ByNomeContaining(String nome);
 	
 	int countByCozinhaId(Long cozinha);
+	
+	//adicionado query no arquivo orm.xml
+	boolean existsResponsavel(Long restauranteId, Long usuarioId);
 }
