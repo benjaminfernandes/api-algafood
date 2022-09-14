@@ -25,7 +25,6 @@ public class AlgaSecurity {
 	
 	//chamado pela classe CheckSecurity no @PreAuthorize
 	public boolean gerenciaRestaurante(Long restauranteId) {
-		
 		return this.restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
 	}
 }
