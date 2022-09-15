@@ -20,6 +20,7 @@ import com.algaworks.algafood.api.v1.assembler.GrupoConverter;
 import com.algaworks.algafood.api.v1.model.GrupoModel;
 import com.algaworks.algafood.api.v1.model.input.GrupoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.GrupoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
@@ -35,6 +36,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 	@Autowired
 	private GrupoConverter grupoConverter;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<GrupoModel> listar(){
@@ -42,6 +44,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 				.removeLinks();
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping("/{codigo}")
 	public GrupoModel buscar(@PathVariable("codigo") Long codigo) {
@@ -49,6 +52,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return this.grupoConverter.toModel(grupo);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -57,6 +61,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return this.grupoConverter.toModel(this.cadastroGrupoService.salvar(grupo));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@PutMapping("/{codigo}")
 	public GrupoModel alterar(@PathVariable("codigo") Long codigo, @Valid @RequestBody GrupoInput grupoInput) {
@@ -65,6 +70,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return this.grupoConverter.toModel(this.cadastroGrupoService.salvar(grupo));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

@@ -21,6 +21,7 @@ import com.algaworks.algafood.api.v1.model.input.SenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioInput;
 import com.algaworks.algafood.api.v1.openapi.controller.UsuarioControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
@@ -36,16 +37,19 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 	@Autowired
 	private UsuarioConverter usuarioConverter;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping
 	public CollectionModel<UsuarioModel> listar(){
 		return this.usuarioConverter.toCollectionModel(this.usuarioRepository.findAll());
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping("/{codigo}")
 	public UsuarioModel buscar(@PathVariable Long codigo) {
 		return this.usuarioConverter.toModel(this.cadastroUsuarioService.buscarOuFalhar(codigo));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UsuarioModel adicionar(@Valid @RequestBody UsuarioComSenhaInput usuarioComSenhaInput) {
@@ -53,6 +57,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return this.usuarioConverter.toModel(this.cadastroUsuarioService.salvar(usuario));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
 	@PutMapping("/{codigo}")
 	public UsuarioModel atualizar(@PathVariable Long codigo, @Valid @RequestBody UsuarioInput usuarioInput) {
 		Usuario usuario = this.cadastroUsuarioService.buscarOuFalhar(codigo);
@@ -60,12 +65,14 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return this.usuarioConverter.toModel(this.cadastroUsuarioService.salvar(usuario));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long codigo) {
 		this.cadastroUsuarioService.excluir(codigo);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
 	@PutMapping("/{codigo}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void alterarSenha(@PathVariable Long codigo, @Valid @RequestBody SenhaInput senhaInput) {

@@ -53,6 +53,7 @@ public class PedidoController implements PedidoControllerOpenApi{
 	@Autowired
 	private AlgaSecurity algaSecurity;
 	
+	@CheckSecurity.Pedidos.PodePesquisar
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
 			@PageableDefault(size=10) Pageable pageable){
@@ -84,6 +85,7 @@ public class PedidoController implements PedidoControllerOpenApi{
 		return this.pedidoConverter.toModel(pedido);
 	}
 	
+	@CheckSecurity.Pedidos.PodeCriar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoModel salvar(@Valid @RequestBody Pedidoinput pedidoInput) {

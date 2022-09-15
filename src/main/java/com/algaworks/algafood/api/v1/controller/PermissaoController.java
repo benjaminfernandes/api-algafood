@@ -19,6 +19,7 @@ import com.algaworks.algafood.api.v1.assembler.PermissaoConverter;
 import com.algaworks.algafood.api.v1.model.PermissaoModel;
 import com.algaworks.algafood.api.v1.model.input.PermissaoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.PermissaoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Permissao;
 import com.algaworks.algafood.domain.repository.PermissaoRepository;
 import com.algaworks.algafood.domain.service.CadastroPermissaoService;
@@ -34,17 +35,20 @@ public class PermissaoController implements PermissaoControllerOpenApi {
 	@Autowired
 	private CadastroPermissaoService permissaoService;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping
 	public CollectionModel<PermissaoModel> listar(){
 		return this.permissaoConverter.toCollectionModel(this.permissaoRepository.findAll());
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping("/{permissaoId}")
 	public PermissaoModel buscar(@PathVariable Long permissaoId) {
 		Permissao permissao = this.permissaoService.buscarOuFalhar(permissaoId);
 		return this.permissaoConverter.toModel(permissao);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PermissaoModel salvar(@RequestBody @Valid PermissaoInput permissaoInput) {
@@ -53,6 +57,7 @@ public class PermissaoController implements PermissaoControllerOpenApi {
 		return this.permissaoConverter.toModel(permissao);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PutMapping("/{permissaoId}")
 	public PermissaoModel atualizar(@PathVariable Long permissaoId, @RequestBody @Valid PermissaoInput permissaoInput) {
 		Permissao permissaoAtual = this.permissaoService.buscarOuFalhar(permissaoId);
@@ -63,6 +68,7 @@ public class PermissaoController implements PermissaoControllerOpenApi {
 		
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@DeleteMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long permissaoId) {
