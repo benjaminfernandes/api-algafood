@@ -14,6 +14,7 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.PedidoController;
 import com.algaworks.algafood.api.v1.model.PedidoModel;
 import com.algaworks.algafood.api.v1.model.input.Pedidoinput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Pedido;
 
 @Component
@@ -23,6 +24,8 @@ public class PedidoConverter extends RepresentationModelAssemblerSupport<Pedido,
 	private ModelMapper modelMapper;
 	@Autowired
 	private Algalinks algalinks;
+	@Autowired
+	private AlgaSecurity algaSecurity;
 	
 	public PedidoConverter() {
 		super(PedidoController.class, PedidoModel.class);
@@ -40,16 +43,18 @@ public class PedidoConverter extends RepresentationModelAssemblerSupport<Pedido,
 		
 		pedidoModel.add(algalinks.linkToPedidos("pedidos"));
 		
-		if(domain.podeSerConfirmado()) {
-			pedidoModel.add(algalinks.linkToConfirmacaoPedido(domain.getCodigo(), "confirmar"));
-		}
-		
-		if(domain.podeSerCancelado()) {
-			pedidoModel.add(algalinks.linkToCancelamentoPedido(domain.getCodigo(), "cancelar"));
-		}
-		
-		if(domain.podeSerEntregue()) {
-			pedidoModel.add(algalinks.linkToEntregaPedido(domain.getCodigo(), "entregar"));
+		if(this.algaSecurity.podeGerenciarPedidos(domain.getCodigo())) {
+			if(domain.podeSerConfirmado()) {
+				pedidoModel.add(algalinks.linkToConfirmacaoPedido(domain.getCodigo(), "confirmar"));
+			}
+			
+			if(domain.podeSerCancelado()) {
+				pedidoModel.add(algalinks.linkToCancelamentoPedido(domain.getCodigo(), "cancelar"));
+			}
+			
+			if(domain.podeSerEntregue()) {
+				pedidoModel.add(algalinks.linkToEntregaPedido(domain.getCodigo(), "entregar"));
+			}
 		}
 		
 		//pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
