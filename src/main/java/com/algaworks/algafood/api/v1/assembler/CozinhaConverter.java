@@ -14,6 +14,7 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.CozinhaController;
 import com.algaworks.algafood.api.v1.model.CozinhaModel;
 import com.algaworks.algafood.api.v1.model.input.CozinhaInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Cozinha;
 
 @Component
@@ -24,6 +25,8 @@ public class CozinhaConverter extends RepresentationModelAssemblerSupport<Cozinh
 	private ModelMapper modelMapper;
 	@Autowired
 	private Algalinks algaLinks;
+	@Autowired
+	private AlgaSecurity algaSecurity;
 	
 	public CozinhaConverter() {
 		super(CozinhaController.class, CozinhaModel.class);
@@ -40,7 +43,9 @@ public class CozinhaConverter extends RepresentationModelAssemblerSupport<Cozinh
 		this.modelMapper.map(domain, cozinhaModel);
 		
 		//cozinhaModel.add(linkTo(CozinhaController.class).withRel("cozinhas"));
-		cozinhaModel.add(algaLinks.linkToCozinhas("cozinhas"));
+		if (algaSecurity.podeConsultarCozinhas()) {
+			cozinhaModel.add(algaLinks.linkToCozinhas("cozinhas"));
+		}
 		return cozinhaModel;
 	}
 

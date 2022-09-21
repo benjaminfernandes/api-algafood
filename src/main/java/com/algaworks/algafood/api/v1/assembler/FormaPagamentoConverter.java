@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.FormaPagamentoController;
 import com.algaworks.algafood.api.v1.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.v1.model.input.FormaPagamentoInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 
 @Component
@@ -23,6 +24,8 @@ public class FormaPagamentoConverter extends RepresentationModelAssemblerSupport
 
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	private AlgaSecurity algaSecurity;
 	
 	@Autowired
     private Algalinks algaLinks;
@@ -42,7 +45,10 @@ public class FormaPagamentoConverter extends RepresentationModelAssemblerSupport
                 createModelWithId(domain.getId(), domain);
         
         this.modelMapper.map(domain, formaPagamentoModel);
-        formaPagamentoModel.add(algaLinks.linkToFormasPagamento("formasPagamento"));
+        if (algaSecurity.podeConsultarFormasPagamento()) {
+        	formaPagamentoModel.add(algaLinks.linkToFormasPagamento("formasPagamento"));
+        }
+        
         return formaPagamentoModel;
 	}
 
@@ -58,8 +64,13 @@ public class FormaPagamentoConverter extends RepresentationModelAssemblerSupport
 	
 	@Override
     public CollectionModel<FormaPagamentoModel> toCollectionModel(Iterable<? extends FormaPagamento> entities) {
-        return super.toCollectionModel(entities)
-            .add(algaLinks.linkToFormasPagamento());
+		CollectionModel<FormaPagamentoModel> collectionModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.podeConsultarFormasPagamento()) {
+	        collectionModel.add(algaLinks.linkToFormasPagamento());
+	    }
+	        
+	    return collectionModel;
     }   
 
 }

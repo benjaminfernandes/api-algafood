@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.UsuarioController;
 import com.algaworks.algafood.api.v1.model.UsuarioModel;
 import com.algaworks.algafood.api.v1.model.input.UsuarioInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Usuario;
 
 @Component
@@ -23,6 +24,9 @@ public class UsuarioConverter extends RepresentationModelAssemblerSupport<Usuari
 
 	@Autowired
 	private Algalinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;  
 	
 	public UsuarioConverter() {
 		super(UsuarioController.class, UsuarioModel.class);
@@ -45,9 +49,10 @@ public class UsuarioConverter extends RepresentationModelAssemblerSupport<Usuari
 		
 		//usuarioModel.add(linkTo(methodOn(UsuarioGrupoController.class)
 				//.listar(usuarioModel.getId())).withRel("grupos-usuario"));
-		
-	    usuarioModel.add(algaLinks.linkToUsuarios("usuarios"));
-	    usuarioModel.add(algaLinks.linkToGruposUsuario(domain.getId(), "grupos-usuario"));
+		if (algaSecurity.podeConsultarUsuariosGruposPermissoes()) {
+		    usuarioModel.add(algaLinks.linkToUsuarios("usuarios"));
+		    usuarioModel.add(algaLinks.linkToGruposUsuario(domain.getId(), "grupos-usuario"));
+		}
 		
 		return usuarioModel;
 	}

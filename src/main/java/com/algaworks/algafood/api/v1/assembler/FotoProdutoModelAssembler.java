@@ -13,20 +13,24 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.RestauranteProdutoFotoController;
 import com.algaworks.algafood.api.v1.model.FotoProdutoModel;
 import com.algaworks.algafood.api.v1.model.input.FotoProdutoInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.FotoProduto;
 
 @Component
-public class FotoProdutoModelAssembler extends RepresentationModelAssemblerSupport<FotoProduto, FotoProdutoModel> implements Converter<FotoProduto, FotoProdutoModel, FotoProdutoInput> {
+public class FotoProdutoModelAssembler extends RepresentationModelAssemblerSupport<FotoProduto, FotoProdutoModel>
+		implements Converter<FotoProduto, FotoProdutoModel, FotoProdutoInput> {
 
 	@Autowired
 	private ModelMapper modelMapper;
 	@Autowired
-    private Algalinks algaLinks;
-	
+	private Algalinks algaLinks;
+	@Autowired
+	private AlgaSecurity algaSecurity; 
+
 	public FotoProdutoModelAssembler() {
-        super(RestauranteProdutoFotoController.class, FotoProdutoModel.class);
-    }
-	
+		super(RestauranteProdutoFotoController.class, FotoProdutoModel.class);
+	}
+
 	@Override
 	public FotoProduto toDomain(FotoProdutoInput inputModel) {
 		return modelMapper.map(modelMapper, FotoProduto.class);
@@ -34,15 +38,16 @@ public class FotoProdutoModelAssembler extends RepresentationModelAssemblerSuppo
 
 	@Override
 	public FotoProdutoModel toModel(FotoProduto domain) {
-		 FotoProdutoModel fotoProdutoModel = modelMapper.map(domain, FotoProdutoModel.class);
-	        
-	        fotoProdutoModel.add(algaLinks.linkToFotoProduto(
-	                domain.getRestauranteId(), domain.getProduto().getId()));
-	        
-	        fotoProdutoModel.add(algaLinks.linkToProduto(
-	                domain.getRestauranteId(), domain.getProduto().getId(), "produto"));
-	        
-	        return fotoProdutoModel;
+		FotoProdutoModel fotoProdutoModel = modelMapper.map(domain, FotoProdutoModel.class);
+
+		// Quem pode consultar restaurantes, também pode consultar os produtos e fotos
+		if (algaSecurity.podeConsultarRestaurantes()) {
+			fotoProdutoModel.add(algaLinks.linkToFotoProduto(domain.getRestauranteId(), domain.getProduto().getId()));
+
+			fotoProdutoModel
+					.add(algaLinks.linkToProduto(domain.getRestauranteId(), domain.getProduto().getId(), "produto"));
+		}
+		return fotoProdutoModel;
 	}
 
 	@Override

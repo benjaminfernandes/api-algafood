@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.CidadeController;
 import com.algaworks.algafood.api.v1.model.CidadeModel;
 import com.algaworks.algafood.api.v1.model.input.CidadeInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Estado;
 
@@ -30,6 +31,8 @@ public class CidadeConverter extends RepresentationModelAssemblerSupport<Cidade,
 	private ModelMapper modelMapper;
 	@Autowired
 	private Algalinks algaLinks;
+	@Autowired
+	private AlgaSecurity algaSecurity;  
 
 	@Override
 	public Cidade toDomain(CidadeInput inputModel) {
@@ -51,9 +54,13 @@ public class CidadeConverter extends RepresentationModelAssemblerSupport<Cidade,
 		
 		//cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class)
 				//.buscar(cidadeModel.getEstado().getId())).withSelfRel());
+		if (algaSecurity.podeConsultarCidades()) {
+			cidadeModel.add(algaLinks.linkToCidades("cidades"));
+		}
 		
-		cidadeModel.add(algaLinks.linkToCidades("cidades"));
-	    cidadeModel.getEstado().add(algaLinks.linkToEstado(cidadeModel.getEstado().getId()));
+		if (algaSecurity.podeConsultarEstados()) {
+			cidadeModel.getEstado().add(algaLinks.linkToEstado(cidadeModel.getEstado().getId()));
+		}
 		
 		return cidadeModel;
 	}
@@ -71,8 +78,13 @@ public class CidadeConverter extends RepresentationModelAssemblerSupport<Cidade,
 	
 	@Override
 	public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
-		return super.toCollectionModel(entities)
-	            .add(algaLinks.linkToCidades());
+		CollectionModel<CidadeModel> collectionModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.podeConsultarCidades()) {
+	        collectionModel.add(algaLinks.linkToCidades());
+	    }
+	    
+	    return collectionModel;
 	}
 
 }

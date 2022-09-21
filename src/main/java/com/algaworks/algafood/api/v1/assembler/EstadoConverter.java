@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.EstadoController;
 import com.algaworks.algafood.api.v1.model.EstadoModel;
 import com.algaworks.algafood.api.v1.model.input.EstadoInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Estado;
 
 @Component
@@ -29,6 +30,8 @@ public class EstadoConverter extends RepresentationModelAssemblerSupport<Estado,
 	private ModelMapper modelMapper;
 	@Autowired
 	private Algalinks algalinks;
+	@Autowired
+	private AlgaSecurity algaSecurity; 
 	
 	@Override
 	public Estado toDomain(EstadoInput inputModel) {
@@ -41,7 +44,9 @@ public class EstadoConverter extends RepresentationModelAssemblerSupport<Estado,
 		this.modelMapper.map(domain, estadoModel);
 		
 		//estadoModel.add(linkTo(methodOn(EstadoController.class).listar()).withRel("estados"));
-		estadoModel.add(algalinks.linkToEstados("estados"));
+		if (algaSecurity.podeConsultarEstados()) {
+			estadoModel.add(algalinks.linkToEstados("estados"));
+		}
 		return estadoModel;
 	}
 
@@ -57,7 +62,12 @@ public class EstadoConverter extends RepresentationModelAssemblerSupport<Estado,
 
 	@Override
 	public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
-		return super.toCollectionModel(entities)
-		        .add(algalinks.linkToEstados());
+		CollectionModel<EstadoModel> collectionModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.podeConsultarEstados()) {
+	        collectionModel.add(algalinks.linkToEstados());
+	    }
+	    
+	    return collectionModel;
 	}
 }

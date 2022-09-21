@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.api.v1.controller.PermissaoController;
 import com.algaworks.algafood.api.v1.model.PermissaoModel;
 import com.algaworks.algafood.api.v1.model.input.PermissaoInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Permissao;
 
 @Component
@@ -24,6 +25,8 @@ public class PermissaoConverter extends RepresentationModelAssemblerSupport<Perm
 	private ModelMapper modelMapper;
 	@Autowired
     private Algalinks algaLinks;
+	@Autowired
+	private AlgaSecurity algaSecurity; 
 	
 	public PermissaoConverter() {
 		super(PermissaoController.class, PermissaoModel.class);
@@ -51,7 +54,12 @@ public class PermissaoConverter extends RepresentationModelAssemblerSupport<Perm
 	
 	@Override
 	public CollectionModel<PermissaoModel> toCollectionModel(Iterable<? extends Permissao> entities) {
-		return super.toCollectionModel(entities)
-				.add(algaLinks.linkToPermissoes());
+		CollectionModel<PermissaoModel> collectionModel = super.toCollectionModel(entities);
+		
+		if(algaSecurity.podeConsultarUsuariosGruposPermissoes()) {
+			 collectionModel.add(algaLinks.linkToPermissoes());
+		}
+		
+		return collectionModel;
 	}
 }
