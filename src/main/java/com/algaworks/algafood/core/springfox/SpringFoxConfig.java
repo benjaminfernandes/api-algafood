@@ -51,16 +51,23 @@ import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -84,7 +91,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
 				.globalResponseMessage(RequestMethod.POST, globalPostResponseMessages())
 				.globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
-				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages()).apiInfo(apiInfoV1())
+				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
+				.securitySchemes(Arrays.asList(securityScheme()))
+				.securityContexts(Arrays.asList(securityContext()))
+				.apiInfo(apiInfoV1())
 				/*.globalOperationParameters(Arrays.asList(
 						new ParameterBuilder()
 							.name("campos")
@@ -155,6 +165,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.globalResponseMessage(RequestMethod.POST, globalPostResponseMessages())
 				.globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
 				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
+				.securitySchemes(Arrays.asList(securityScheme()))
+				.securityContexts(Arrays.asList(securityContext()))
 				.apiInfo(apiInfoV2())
 				.additionalModels(typeResolver.resolve(Problem.class))
 				.ignoredParameterTypes(ServletWebRequest.class, URL.class, 
@@ -258,5 +270,36 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
+	
+	//instancia para descrever a técnica de segurança utilizada na API
+	//Aula 23.42
+	private SecurityScheme securityScheme() {
+		
+		return new OAuthBuilder()
+				.name("Algafood")
+				.grantTypes(grantTypes())
+				.scopes(scopes())
+				.build();
+	}
+	
+	private SecurityContext securityContext() {
+		var securityReference = SecurityReference.builder()
+				.reference("Algafood")
+				.scopes(scopes().toArray(new AuthorizationScope[0]))
+				.build();
+		
+		return SecurityContext.builder().securityReferences(Arrays.asList(securityReference))
+				.forPaths(PathSelectors.any())
+				.build();
+	}
+	
+	private List<GrantType> grantTypes(){
+		return Arrays.asList(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
+	}
+	
+	private List<AuthorizationScope> scopes(){
+		return Arrays.asList(new AuthorizationScope("READ", "Acesso de leitura"),
+				new AuthorizationScope("WRITE", "Acesso de escrita"));
 	}
 }
