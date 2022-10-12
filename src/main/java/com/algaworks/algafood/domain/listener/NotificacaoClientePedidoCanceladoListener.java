@@ -22,7 +22,7 @@ public class NotificacaoClientePedidoCanceladoListener {
 		Pedido pedido = event.getPedido();
 		
 		var mensagem = this.montaMensagem.getMensagemPadrao(pedido, 
-				"pedido-cancelado.html");
+				"emails/pedido-cancelado.html");
 		
 		envioEmail.enviar(mensagem);
 	}

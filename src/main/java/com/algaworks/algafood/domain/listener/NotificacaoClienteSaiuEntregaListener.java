@@ -22,7 +22,7 @@ public class NotificacaoClienteSaiuEntregaListener {
 		Pedido pedido = event.getPedido();
 		
 		var mensagem = this.montaMensagem.getMensagemPadrao(pedido, 
-				"pedido-saiu-entrega.html");
+				"emails/pedido-saiu-entrega.html");
 		
 		envioEmail.enviar(mensagem);
 	}

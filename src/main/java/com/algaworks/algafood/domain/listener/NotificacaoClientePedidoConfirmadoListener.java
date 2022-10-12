@@ -23,7 +23,7 @@ public class NotificacaoClientePedidoConfirmadoListener {
 		Pedido pedido = event.getPedido();
 		
 		var mensagem = this.montaMensagemPadrao.getMensagemPadrao(pedido, 
-				"pedido-confirmado.html");
+				"emails/pedido-confirmado.html");
 		
 		envioEmail.enviar(mensagem);
 	}
