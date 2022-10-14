@@ -1,5 +1,7 @@
 package com.algaworks.algafood.core.security.authorizationserver;
 
+import java.security.KeyPair;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 
 import javax.sql.DataSource;
@@ -23,6 +25,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.RSAKey.Builder;
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -42,7 +50,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private DataSource dataSource;
 	
-	//@Autowired configuração do para utilizar o redis
+	//@Autowired configuração do para utilizar o redis - Redis BD em memória para armazenar tokens
 	//private RedisConnectionFactory redisConnectionFactory;
 	
 	@Override
@@ -126,15 +134,30 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		var jwtAccessTokenConverter = new JwtAccessTokenConverter();
 		//jwtAccessTokenConverter.setSigningKey("8a9sf5asdf6a4sd6f48sd45fa4sd65f48asd4f65ad4sf8d5d5d5d8sa65");//utiliza o algoritmo hmacsha26 assinatura simetrica
 		
+		jwtAccessTokenConverter.setKeyPair(keyPair());
+		
+		return jwtAccessTokenConverter;
+	}
+	
+	private KeyPair keyPair() {
 		var keyStorePass = this.jwtKeyStoreProperties.getPassword(); //senha para abrir o arquivo jks
 		var keyPairAlias = this.jwtKeyStoreProperties.getKeypairAlias();
 		
 		var keyStoreKeyFactory = new KeyStoreKeyFactory(this.jwtKeyStoreProperties.getJksLocation(), keyStorePass.toCharArray());
 		var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
 		
-		jwtAccessTokenConverter.setKeyPair(keyPair);
+		return keyPair;
+	}
+	
+	//Para expor a public key - Aula 23.45
+	@Bean
+	public JWKSet jwkSet() {
+		RSAKey.Builder builder = new Builder((RSAPublicKey) keyPair().getPublic())
+				.keyUse(KeyUse.SIGNATURE)
+				.algorithm(JWSAlgorithm.RS256)
+				.keyID("algafood-key-id");
 		
-		return jwtAccessTokenConverter;
+		return new JWKSet(builder.build());
 	}
 	
 	private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
@@ -147,6 +170,5 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		
 		return new CompositeTokenGranter(granters);
 	}
-	
 	
 }
