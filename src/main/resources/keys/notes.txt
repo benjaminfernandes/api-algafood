@@ -1,0 +1,2 @@
+o arquivo algafood.jks foi excluído na aula 23.46 e substituído por um base64 gerado a partir o algafood.jks
+Desta forma conseguimos externalizar sem o arquivo, por exemplo, pode ser criado uma variável de ambiente no prod e colocar o base64 lá
