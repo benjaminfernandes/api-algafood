@@ -20,8 +20,6 @@ services:
     environment: 
       DB_HOST: algafood-mysql
       DB_PORT: 3306
-    ports:
-      - "8080:8080"
     networks:
       - algafood-network
     depends_on:
