@@ -24,7 +24,7 @@
 		<aws-java-sdk-s3.version>1.12.261</aws-java-sdk-s3.version>
 		<spring-fox.version>2.9.2</spring-fox.version>
 		<logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
-		<spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
+		<spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
 		<spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 	</properties>
@@ -176,6 +176,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -210,7 +218,8 @@
 						</executions>
 						<configuration>
 							<repository>algafood-api</repository>
-							<!-- <tag>${project.version}</tag> pega a versão informada acima, e se comentada o padrão é latest-->
+							<!-- <tag>${project.version}</tag> pega a versão informada acima, 
+								e se comentada o padrão é latest -->
 							<buildArgs>
 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
 							</buildArgs>
