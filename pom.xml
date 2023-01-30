@@ -28,6 +28,7 @@
 		<spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 		<springdoc.version>1.6.14</springdoc.version>
+		<google-guava.version>31.1-jre</google-guava.version>
 	</properties>
 
 	<dependencies>
@@ -152,6 +153,12 @@
 			<artifactId>springdoc-openapi-security</artifactId>
 			<version>${springdoc.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${google-guava.version}</version>
+		</dependency>
+
 		<!-- <dependency> <groupId>io.springfox</groupId> <artifactId>springfox-swagger2</artifactId> 
 			<version>${spring-fox.version}</version> <exclusions> <exclusion> <groupId>org.springframework.plugin</groupId> 
 			<artifactId>spring-plugin-core</artifactId> </exclusion> </exclusions> </dependency> -->
