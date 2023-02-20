@@ -50,8 +50,12 @@ public class SpringDocConfig {
 						.license(new License().name("Apache 2.0").url("http://springdoc.com")))
 				.externalDocs(new ExternalDocumentation().description("Documentação externa detalhada")
 						.url("https://algaworks.com"))
-				.tags(Arrays.asList(new Tag().name("Cidades").description("Gerencia as cidades"),
-						new Tag().name("Grupos").description("Gerencia os grupos")))
+				.tags(Arrays.asList(
+						new Tag().name("Cidades").description("Gerencia as cidades"),
+						new Tag().name("Grupos").description("Gerencia os grupos"),
+						new Tag().name("Cozinhas").description("Gerencia as cozinhas"),
+						new Tag().name("Formas de pagamento").description("Gerencia as formas de pagamento"),
+						new Tag().name("Pedidos").description("Gerencia os pedidos")))
 				.components(new Components().schemas(gerarSchemas()).responses(gerarResponses()));
 	}
 
