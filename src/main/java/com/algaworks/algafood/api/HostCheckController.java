@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HostCheckController {
 
+	//Feito para identificar qual instância está executando no teste de loadbalance
 	@GetMapping("/hostcheck")
 	public String checkHost() throws UnknownHostException {
 		return InetAddress.getLocalHost().getHostAddress() + " - " + InetAddress.getLocalHost().getHostName();
