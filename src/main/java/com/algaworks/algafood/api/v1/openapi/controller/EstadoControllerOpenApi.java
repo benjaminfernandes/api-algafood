@@ -1,19 +1,18 @@
 package com.algaworks.algafood.api.v1.openapi.controller;
 
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.v1.model.EstadoModel;
 import com.algaworks.algafood.api.v1.model.input.EstadoInput;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @SecurityRequirement(name = "security_auth")
 @Tag(name = "Estados")
@@ -49,6 +48,6 @@ public interface EstadoControllerOpenApi {
 			@ApiResponse(responseCode = "404", description = "Estado não encontrado", content = {
 					@Content(schema = @Schema(ref = "Problema")) })
 	})
-    ResponseEntity<Void> remover(@Parameter(description = "ID de um estado", example = "1", required = true) Long estadoId);
+    void remover(@Parameter(description = "ID de um estado", example = "1", required = true) Long estadoId);
 	
 }
