@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.v1.Algalinks;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -21,6 +23,7 @@ public class RootEntryPointController {
 	private AlgaSecurity algaSecurity;  
 
 	@GetMapping("/v1")
+	@Operation(hidden = true)
 	public RootEntryPointModel root() {
 		var rootEntryPointModel = new RootEntryPointModel();
 		if (algaSecurity.podeConsultarCozinhas()) {
