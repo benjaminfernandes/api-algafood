@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -100,7 +100,7 @@ public class CadastroCozinhaIT {
 	@Test
 	public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
 		given()
-			.pathParam("cozinhaId", this.ID_COZINHA_INEXISTENTE)
+			.pathParam("cozinhaId", ID_COZINHA_INEXISTENTE)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{cozinhaId}")
