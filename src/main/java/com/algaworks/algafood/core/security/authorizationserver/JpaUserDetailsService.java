@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +28,12 @@ public class JpaUserDetailsService implements UserDetailsService {
 		Usuario usuario = this.usuarioRepository.findByEmail(username)
 					.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado!"));
 		
-		return new AuthUser(usuario, getAuthorities(usuario));
+		/*Foi alterado o retorno pois com a nova versão o Spring oauth2 ficou com problema na deserialização e cast com o objeto AuthUser
+		 * Desta forma o JWT perdeu o acesso dos dados do usuário, tendo que fazer outra rotina para realizar a busca desta informações.
+		 * Aula 27.12
+		*/
+		//return new AuthUser(usuario, getAuthorities(usuario));
+		return new User(usuario.getEmail(),usuario.getSenha(), getAuthorities(usuario));
 	}
 
 	private Collection<GrantedAuthority> getAuthorities(Usuario usuario){

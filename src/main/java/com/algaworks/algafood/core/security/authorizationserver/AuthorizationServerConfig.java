@@ -11,6 +11,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,7 +41,8 @@ public class AuthorizationServerConfig {
 	@Order(Ordered.HIGHEST_PRECEDENCE)//Teremos diversos filterChain, um para o AS e outro para o resource server. Com esta anotação ele inicia com prioridade
 	public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
 		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http); //Aplica diversas configs padrões do AS
-		return http.build();
+		return http.formLogin(Customizer.withDefaults())
+				.build();
 	}
 	
 	//Responsável por escrever quem é o AS que assina os tokens - URL
@@ -78,6 +81,7 @@ public class AuthorizationServerConfig {
 	@Bean
 	public RegisteredClientRepository registeredClientRepository(PasswordEncoder encoder) {
 		
+		//Config Client Credentials
 		RegisteredClient algafoodBackend = RegisteredClient
 				.withId("1")//Id que vai no BD - não o Id do cliente
 				.clientId("algafood-backend")
@@ -91,13 +95,52 @@ public class AuthorizationServerConfig {
 						.build())
 				.build();
 		
-		return new InMemoryRegisteredClientRepository(Arrays.asList(algafoodBackend));
+		//Config Authorization Code
+		RegisteredClient algafoodWeb = RegisteredClient
+				.withId("2")
+				.clientId("algafood-web")
+				.clientSecret(encoder.encode("web123"))
+				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.scope("READ")
+				.scope("WRITE")
+				.tokenSettings(TokenSettings.builder()
+						.accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED) //Token JWT transparente
+						.accessTokenTimeToLive(Duration.ofMinutes(15))
+						.build())
+				.redirectUri("http://127.0.0.1:8080/authorized")
+				.redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
+				.clientSettings(ClientSettings.builder()
+						.requireAuthorizationConsent(true)
+						.build())
+				.build();
+		
+		
+		RegisteredClient foodAnalytics = RegisteredClient
+				.withId("3")
+				.clientId("foodanalytics")
+				.clientSecret(encoder.encode("web123"))
+				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.scope("READ")
+				.scope("WRITE")
+				.tokenSettings(TokenSettings.builder()
+						.accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED) //Token JWT transparente
+						.accessTokenTimeToLive(Duration.ofMinutes(30))
+						.build())
+				.redirectUri("http://www.foodanalytics,local:8082")
+				.clientSettings(ClientSettings.builder()
+						.requireAuthorizationConsent(false)
+						.build())
+				.build();
+		
+		return new InMemoryRegisteredClientRepository(Arrays.asList(algafoodBackend, algafoodWeb, foodAnalytics));
 	}
 	
 	
 	@Bean
 	public OAuth2AuthorizationService oAuth2AuthorizationService(JdbcOperations jdbcOperations, RegisteredClientRepository registeredClientRepository) {
-		
+
 		return new JdbcOAuth2AuthorizationService(jdbcOperations, registeredClientRepository);
 	}
 	
