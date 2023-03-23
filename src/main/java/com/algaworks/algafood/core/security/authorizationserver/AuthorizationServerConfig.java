@@ -176,27 +176,24 @@ public class AuthorizationServerConfig {
 	
 	
 	//Esta config foi feita para resolver o problema demonstrado na aula 27.12 que alterou o retorno do método loadUserByUsername da classe JpaUserDetailsService
-	@Bean
-	public OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer(UsuarioRepository usuarioRepository) {
-		return context -> {
-			Authentication authentication = context.getPrincipal();
-			
-			if(authentication.getPrincipal() instanceof User) { //esta regra não se aplica para o client credentials
-				User user = (User) authentication.getPrincipal();
-				
-				Usuario usuario = usuarioRepository.findByEmail(user.getUsername()).orElseThrow();
-				//aqui adiciona os authorities
-				
-				Set<String> authorities = new HashSet<>();
-				for(GrantedAuthority authority : user.getAuthorities()) {
-					authorities.add(authority.getAuthority());
-				}
-				
-				context.getClaims().claim("usuario_id", usuario.getId().toString());
-				context.getClaims().claim("authorities", authorities);
-			}
-		};
-		
-	}
+	  @Bean
+	    public OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer(UsuarioRepository usuarioRepository) {
+	        return context -> {
+	            Authentication authentication = context.getPrincipal();
+	            if (authentication.getPrincipal() instanceof User) {//esta regra não se aplica para o client credentials
+	                User user = (User) authentication.getPrincipal();
+
+	                Usuario usuario = usuarioRepository.findByEmail(user.getUsername()).orElseThrow();
+
+	                Set<String> authorities = new HashSet<>();
+	                for (GrantedAuthority authority : user.getAuthorities()) {
+	                    authorities.add(authority.getAuthority());
+	                }
+
+	                context.getClaims().claim("usuario_id", usuario.getId());
+	                context.getClaims().claim("authorities", authorities);
+	            }
+	        };
+	    }
 	
 }

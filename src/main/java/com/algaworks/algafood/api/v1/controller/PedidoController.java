@@ -55,13 +55,13 @@ public class PedidoController implements PedidoControllerOpenApi{
 	
 	@CheckSecurity.Pedidos.PodePesquisar
 	@GetMapping
-	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter,
+	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
 			@PageableDefault(size=10) Pageable pageable){
 		
 		Pageable pageableTraduzido = traduzirPageable(pageable);
 		
 		Page<Pedido> pedidosPage = this.pedidoRepository
-				.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageableTraduzido);
+				.findAll(PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
 		
 		/*List<PedidoResumoModel> pedidosModel = this.pedidoResumoConverter
 				.toCollectionModel(pedidosPage.getContent());
