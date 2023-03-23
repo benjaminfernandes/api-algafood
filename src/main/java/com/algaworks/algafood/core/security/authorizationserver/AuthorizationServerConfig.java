@@ -2,8 +2,6 @@ package com.algaworks.algafood.core.security.authorizationserver;
 
 import java.io.InputStream;
 import java.security.KeyStore;
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,17 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
-import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -88,8 +80,10 @@ public class AuthorizationServerConfig {
 	//Aqui guarda os clientes do AS
 	//Configuração para token JWT com cliente em memória
 	@Bean
-	public RegisteredClientRepository registeredClientRepository(PasswordEncoder encoder) {
+	public RegisteredClientRepository registeredClientRepository(PasswordEncoder encoder, JdbcOperations operations) {
 		
+		/*
+		 * Clients in memory
 		//Config Client Credentials
 		RegisteredClient algafoodBackend = RegisteredClient
 				.withId("1")//Id que vai no BD - não o Id do cliente
@@ -145,8 +139,15 @@ public class AuthorizationServerConfig {
 						.requireAuthorizationConsent(false)
 						.build())
 				.build();
+		*/
+		JdbcRegisteredClientRepository repository = new JdbcRegisteredClientRepository(operations);
+		//Usado somente para criar rapidamente os clients
+		//repository.save(algafoodBackend);
+		//repository.save(algafoodWeb);
+		//repository.save(foodAnalytics);
 		
-		return new InMemoryRegisteredClientRepository(Arrays.asList(algafoodBackend, algafoodWeb, foodAnalytics));
+		return repository;
+		//return new InMemoryRegisteredClientRepository(Arrays.asList(algafoodBackend, algafoodWeb, foodAnalytics));
 	}
 	
 	
