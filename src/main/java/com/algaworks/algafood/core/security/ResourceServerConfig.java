@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,7 +35,10 @@ public class ResourceServerConfig {
 			.oauth2ResourceServer()
 			.jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
 		
-		return http.formLogin(Customizer.withDefaults())//É também adicionada esta config aqui pois o AS está no mesmo projeto do Resource Server
+		//return http.formLogin(Customizer.withDefaults())//É também adicionada esta config aqui pois o AS está no mesmo projeto do Resource Server
+				//.build();
+		
+		return http.formLogin(customizer -> customizer.loginPage("/login"))
 				.build();
 	}
 	

@@ -11,7 +11,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.core.Authentication;
@@ -42,7 +41,7 @@ public class AuthorizationServerConfig {
 	@Order(Ordered.HIGHEST_PRECEDENCE)//Teremos diversos filterChain, um para o AS e outro para o resource server. Com esta anotação ele inicia com prioridade
 	public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
 		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http); //Aplica diversas configs padrões do AS
-		return http.formLogin(Customizer.withDefaults())
+		return http.formLogin(customizer -> customizer.loginPage("/login"))
 				.build();
 	}
 	
