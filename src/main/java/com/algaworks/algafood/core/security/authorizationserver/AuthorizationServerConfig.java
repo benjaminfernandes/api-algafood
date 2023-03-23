@@ -102,11 +102,14 @@ public class AuthorizationServerConfig {
 				.clientSecret(encoder.encode("web123"))
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 				.scope("READ")
 				.scope("WRITE")
 				.tokenSettings(TokenSettings.builder()
 						.accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED) //Token JWT transparente
 						.accessTokenTimeToLive(Duration.ofMinutes(15))
+						.reuseRefreshTokens(false)//opção recomendável por questões de segurança
+						.refreshTokenTimeToLive(Duration.ofDays(1))
 						.build())
 				.redirectUri("http://127.0.0.1:8080/authorized")
 				.redirectUri("http://127.0.0.1:8080/swagger-ui/oauth2-redirect.html")
