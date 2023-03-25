@@ -11,8 +11,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,10 +23,12 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.algaworks.algafood.domain.model.Usuario;
@@ -49,22 +51,25 @@ public class AuthorizationServerConfig {
 
 		// Customizando
 		// Aula 27.18 Customizando a página de consentimento de scopos
-		OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer<>();
+		OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
 		authorizationServerConfigurer.authorizationEndpoint(customizer -> customizer.consentPage("/oauth2/consent"));
 
 		RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
 
-		http.requestMatcher(endpointsMatcher)
-				.authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
-				.csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher)).apply(authorizationServerConfigurer);
+		http.securityMatcher(endpointsMatcher).authorizeHttpRequests(authorize -> {
+			authorize.anyRequest().authenticated();
+		}).csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher)).formLogin(Customizer.withDefaults())
+				.exceptionHandling(exceptions -> {
+					exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
+				}).apply(authorizationServerConfigurer);
 
-		return http.formLogin(customizer -> customizer.loginPage("/login")).build();
+		return http.build();
 	}
 
 	// Responsável por escrever quem é o AS que assina os tokens - URL
 	@Bean
-	public ProviderSettings providerSettings(AlgaFoodSecurityProperties properties) {
-		return ProviderSettings.builder().issuer(properties.getProviderUrl()).build();
+	public AuthorizationServerSettings providerSettings(AlgaFoodSecurityProperties properties) {
+		return AuthorizationServerSettings.builder().issuer(properties.getProviderUrl()).build();
 	}
 
 	// Aqui guarda os clientes do AS
@@ -195,10 +200,11 @@ public class AuthorizationServerConfig {
 		// return new InMemoryOAuth2AuthorizationConsentService();
 		return new JdbcOAuth2AuthorizationConsentService(operations, repository);
 	}
-	
+
 	@Bean
-	public Oauth2AuthorizationQueryService authorizationQueryService(JdbcOperations operations, RegisteredClientRepository repository) {
+	public Oauth2AuthorizationQueryService authorizationQueryService(JdbcOperations operations,
+			RegisteredClientRepository repository) {
 		return new JdbcOauth2AuthorizationQueryService(operations, repository);
 	}
-	
+
 }

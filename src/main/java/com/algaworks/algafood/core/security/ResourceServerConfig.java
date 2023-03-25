@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +18,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true) //para funcionar os filters
+@EnableMethodSecurity(prePostEnabled = true) //para funcionar os filters
 @EnableWebSecurity
 public class ResourceServerConfig {
 
@@ -26,9 +27,7 @@ public class ResourceServerConfig {
 	public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
 		
 		http
-			.authorizeHttpRequests()
-			.antMatchers("/oauth2/**").authenticated()
-			.and()
+			.formLogin(Customizer.withDefaults())//esta config somente é necessário de o Authorization server é o mesmo projeto do resource server 
 			.csrf().disable()
 			.cors().and()
 			//.oauth2ResourceServer().opaqueToken(); quando é utilizado o token opaco
@@ -38,8 +37,7 @@ public class ResourceServerConfig {
 		//return http.formLogin(Customizer.withDefaults())//É também adicionada esta config aqui pois o AS está no mesmo projeto do Resource Server
 				//.build();
 		
-		return http.formLogin(customizer -> customizer.loginPage("/login"))
-				.build();
+		return http.build();
 	}
 	
 	//Esta config foi feita para resolver o problema demonstrado na aula 27.12 que alterou o retorno do método loadUserByUsername da classe JpaUserDetailsService
